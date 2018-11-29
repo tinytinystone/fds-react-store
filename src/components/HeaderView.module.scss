@@ -1,0 +1,27 @@
+@import '../common.scss';
+
+.member {
+  padding: 0;
+  text-align: center;
+  margin-top: 20px;
+  background-color: $sub-color;
+}
+.signIn,
+.signOut,
+.signUp,
+.myCart,
+.order {
+  @include commonMenuName;
+  margin: 10px;
+  padding: 5px 10px;
+}
+.member li:hover {
+  @include commonHover;
+}
+.logo {
+  margin-top: 20px;
+  font-size: 5rem;
+  font-weight: 900;
+  text-align: center;
+  padding: 20px;
+}

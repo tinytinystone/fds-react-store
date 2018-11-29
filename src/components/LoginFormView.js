@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import api from '../api';
+import s from './LoginFormView.module.scss';
 
 export default class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      usernameForLogin: '',
-      passwordForLogin: '',
+      usernameForLogin: 'ID',
+      passwordForLogin: 'PASSWORD',
       loginSuccess: false,
     };
   }
@@ -40,15 +40,13 @@ export default class LoginForm extends Component {
     }
     return (
       <React.Fragment>
-        <form onSubmit={this.handleSubmit}>
-          <label>ID</label>
+        <form onSubmit={this.handleSubmit} className={s.loginForm}>
           <input
             type="text"
             name="username"
             onChange={this.handleUNChange}
             value={this.state.usernameForLogin}
           />
-          <label>PW</label>
           <input
             type="password"
             onChange={this.handlePWChange}

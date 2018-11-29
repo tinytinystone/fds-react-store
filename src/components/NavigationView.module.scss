@@ -1,0 +1,15 @@
+@import '../common.scss';
+
+.category {
+}
+.categoryList {
+  text-align: center;
+}
+.categoryList li {
+  @include commonMenuName;
+  padding: 5px;
+  margin: 5px;
+}
+.categoryList li:hover {
+  @include commonHover;
+}

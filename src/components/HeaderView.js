@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
+import s from './HeaderView.module.scss';
+
 export default class HeaderView extends Component {
   constructor(props) {
     super(props);
@@ -16,26 +18,40 @@ export default class HeaderView extends Component {
     }
     return (
       <React.Fragment>
+        <ul className={s.member}>
+          {username ? (
+            <React.Fragment>
+              <li
+                onClick={() => {
+                  logout();
+                  this.setState({ logoutSuccess: true });
+                }}
+                key={1}
+                className={s.signOut}
+              >
+                SIGN OUT
+              </li>
+            </React.Fragment>
+          ) : (
+            <Link to="/login">
+              <li key={2} className={s.signIn}>
+                SIGN IN
+              </li>
+            </Link>
+          )}
+          <li key={3} className={s.signUp}>
+            SIGN UP
+          </li>
+          <li key={4} className={s.myCart}>
+            MY CART
+          </li>
+          <li key={5} className={s.order}>
+            ORDER
+          </li>
+        </ul>
         <Link to="/">
-          <h1>쇼핑몰</h1>
+          <h1 className={s.logo}>GARDEN</h1>
         </Link>
-        {username ? (
-          <React.Fragment>
-            <div>{username} 님 환영합니다</div>
-            <div
-              onClick={() => {
-                logout();
-                this.setState({
-                  logoutSuccess: true,
-                });
-              }}
-            >
-              로그아웃
-            </div>
-          </React.Fragment>
-        ) : (
-          <Link to="/login">로그인</Link>
-        )}
       </React.Fragment>
     );
   }

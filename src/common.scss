@@ -1,0 +1,50 @@
+$main-color: #2081c3;
+$sub-color: #f7f9f9;
+$a-color: #78d5d7;
+$b-color: #bed8d4;
+$c-color: #63d2ff;
+$font: 'Hack', 'Spoqa Han Sans', 'Sans-serif';
+
+@mixin desktop {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin commonMenuName {
+  display: inline-block;
+  cursor: pointer;
+}
+
+@mixin commonHover {
+  font-weight: 900;
+  text-shadow: 1px 1px 2px #eee;
+}
+
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.readable-hidden,
+.skip-nav,
+legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  margin: -1px;
+  clip: rect(0, 0, 0, 0);
+}
+.skip-nav:focus {
+  width: 100%;
+  height: auto;
+  padding: 1em;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  clip: rect(auto, auto, auto, auto);
+  z-index: 100;
+}
