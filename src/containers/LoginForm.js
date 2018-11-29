@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import LoginFormView from '../components/LoginFormView';
+import { withUser } from '../contexts/UserContext';
 
-export default class LoginForm extends Component {
+class LoginForm extends Component {
   render() {
-    return (
-      <div>
-        <LoginFormView />
-      </div>
-    );
+    const { login } = this.props;
+    return <LoginFormView onLogin={login} />;
   }
 }
+
+export default withUser(LoginForm);
