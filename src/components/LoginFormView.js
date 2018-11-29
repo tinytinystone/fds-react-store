@@ -8,7 +8,7 @@ export default class LoginForm extends Component {
     this.state = {
       usernameForLogin: '',
       passwordForLogin: '',
-      success: false,
+      loginSuccess: false,
     };
   }
   handleSubmit = async e => {
@@ -18,7 +18,7 @@ export default class LoginForm extends Component {
     // 로그인이 성공적으로 끝났을 때
     // Redirect 컴포넌트를 렌더링 -> 주소표시줄 상태 바꿈
     this.setState({
-      success: true,
+      loginSuccess: true,
     });
     // 로그인에 실패했을 때
   };
@@ -33,8 +33,8 @@ export default class LoginForm extends Component {
     });
   };
   render() {
-    const { success } = this.state;
-    if (success) {
+    const { loginSuccess } = this.state;
+    if (loginSuccess) {
       alert(`${this.state.usernameForLogin} 님 로그인에 성공했습니다`);
       return <Redirect to="/" />;
     }
