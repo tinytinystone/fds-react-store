@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import api from '../api';
 
 export default class LoginForm extends Component {
@@ -7,13 +8,19 @@ export default class LoginForm extends Component {
     this.state = {
       usernameForLogin: '',
       passwordForLogin: '',
+      success: false,
     };
   }
   handleSubmit = async e => {
     const { usernameForLogin, passwordForLogin } = this.state;
     e.preventDefault();
     await this.props.onLogin(usernameForLogin, passwordForLogin);
-    alert(`${this.state.usernameForLogin} 님 로그인에 성공했습니다`);
+    // 로그인이 성공적으로 끝났을 때
+    // Redirect 컴포넌트를 렌더링 -> 주소표시줄 상태 바꿈
+    this.setState({
+      success: true,
+    });
+    // 로그인에 실패했을 때
   };
   handleUNChange = e => {
     this.setState({
@@ -26,6 +33,11 @@ export default class LoginForm extends Component {
     });
   };
   render() {
+    const { success } = this.state;
+    if (success) {
+      alert(`${this.state.usernameForLogin} 님 로그인에 성공했습니다`);
+      return <Redirect to="/" />;
+    }
     return (
       <React.Fragment>
         <form onSubmit={this.handleSubmit}>
