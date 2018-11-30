@@ -15,27 +15,29 @@ export default class ProductList extends Component {
 
   async componentDidMount() {
     const { category } = this.props;
-    // const category = 'plant';
-    const { data: products } = await api.get('/products');
-    if (category == null) {
-      this.setState({
-        products,
-        loading: false,
-      });
-    } else {
-      // const { products } = this.state;
-      console.log(products);
-      const filteredProducts = products.filter(p => p.category === category);
-      this.setState({
-        currentCategory: category,
-        products: filteredProducts,
-        loading: false,
-      });
-    }
+    // if (this.state.currentCategory !== goCategory) {
+    const { data: products } = await api.get('/products', {
+      params: {
+        category,
+      },
+    });
+    this.setState({
+      products,
+      loading: false,
+      currentCategory: category,
+    });
+    // } else {
+    //   const { data: products } = await api.get('/products');
+    //   this.setState({
+    //     products,
+    //     loading: false,
+    //   });
+    // }
   }
 
   render() {
     const { products } = this.state;
+    const { category } = this.props;
     const productsList = products.map(p => ({
       title: p.title,
       id: p.id,

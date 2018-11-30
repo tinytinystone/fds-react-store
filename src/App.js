@@ -19,12 +19,12 @@ export default class App extends Component {
             <Route exact path="/" component={HomePage} />
             <Route path="/login" component={LoginPage} />
             <Route path="/product" component={HomePage} />
-            <Route
+            {/* <Route
               exact
               path="/product/"
               search="?category="
               component={HomePage}
-            />
+            /> */}
             <Route path="/product/:productId" component={ProductPage} />
           </div>
         </UserProvider>
