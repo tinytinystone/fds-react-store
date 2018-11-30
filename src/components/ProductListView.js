@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ProductList from '../containers/ProductList';
 import withLoading from '../hoc/withLoading';
 
 class ProductListView extends Component {
@@ -13,6 +12,12 @@ class ProductListView extends Component {
       // imgUrl: '...',
     ],
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentCategory: '',
+    };
+  }
   render() {
     const { products } = this.props;
     return (

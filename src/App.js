@@ -18,6 +18,13 @@ export default class App extends Component {
         exact prop이 없을 때: 주소가 path로 시작하면 페이지가 그려짐. */}
             <Route exact path="/" component={HomePage} />
             <Route path="/login" component={LoginPage} />
+            <Route path="/product" component={HomePage} />
+            <Route
+              exact
+              path="/product/"
+              search="?category="
+              component={HomePage}
+            />
             <Route path="/product/:productId" component={ProductPage} />
           </div>
         </UserProvider>

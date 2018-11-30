@@ -7,17 +7,31 @@ export default class ProductList extends Component {
     super(props);
 
     this.state = {
+      currentCategory: '',
       loading: true,
       products: [],
     };
   }
 
   async componentDidMount() {
+    const { category } = this.props;
+    // const category = 'plant';
     const { data: products } = await api.get('/products');
-    this.setState({
-      products,
-      loading: false,
-    });
+    if (category == null) {
+      this.setState({
+        products,
+        loading: false,
+      });
+    } else {
+      // const { products } = this.state;
+      console.log(products);
+      const filteredProducts = products.filter(p => p.category === category);
+      this.setState({
+        currentCategory: category,
+        products: filteredProducts,
+        loading: false,
+      });
+    }
   }
 
   render() {
