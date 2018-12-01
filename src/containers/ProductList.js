@@ -15,7 +15,6 @@ export default class ProductList extends Component {
 
   async componentDidMount() {
     const { category } = this.props;
-    // if (this.state.currentCategory !== goCategory) {
     const { data: products } = await api.get('/products', {
       params: {
         category,
@@ -37,7 +36,6 @@ export default class ProductList extends Component {
 
   render() {
     const { products } = this.state;
-    const { category } = this.props;
     const productsList = products.map(p => ({
       title: p.title,
       id: p.id,

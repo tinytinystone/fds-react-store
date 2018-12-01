@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import s from './LoginFormView.module.scss';
 
 export default class LoginForm extends Component {
@@ -55,6 +55,12 @@ export default class LoginForm extends Component {
           />
           <button>로그인</button>
         </form>
+        <div>
+          <p>아직 회원이 아니신가요?</p>
+          <Link to="/register">
+            <button>회원가입</button>
+          </Link>
+        </div>
       </React.Fragment>
     );
   }
