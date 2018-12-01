@@ -41,9 +41,11 @@ export default class HeaderView extends Component {
               </li>
             </Link>
           )}
-          <li key={3} className={s.myCart}>
-            MY CART
-          </li>
+          <Link to="/cart">
+            <li key={3} className={s.myCart}>
+              MY CART
+            </li>
+          </Link>
           <li key={4} className={s.order}>
             ORDER
           </li>

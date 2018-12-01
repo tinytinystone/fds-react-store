@@ -14,31 +14,23 @@ class ProductDetailView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      optionId: '',
-      optionPrice: this.props.options[0].price,
-      optionQuantity: 1,
+      selectedOptionId: '',
+      quantity: 1,
     };
-    this.handleOptionChange = this.handleOptionChange.bind(this);
-    this.handleQtyChange = this.handleQtyChange.bind(this);
   }
-  handleOptionChange(e) {
-    const { options } = this.props;
-    e.preventDefault();
-    const optionId = parseInt(e.target.value);
-    const optionPrice = options[optionId - 1].price;
+  handleOptionChange = e => {
+    const selectedOptionId = parseInt(e.target.value);
     this.setState({
-      optionId,
-      optionPrice,
+      selectedOptionId,
+      quantity: 1,
     });
-  }
-  handleQtyChange(e) {
-    e.preventDefault();
-    const optionQuantity = parseInt(e.target.value);
-    parseInt(this.state.optionPrice) * optionQuantity > 0 &&
-      this.setState({
-        optionQuantity,
-      });
-  }
+  };
+  handleQtyChange = e => {
+    const quantity = parseInt(e.target.value);
+    this.setState({
+      quantity,
+    });
+  };
   render() {
     const {
       id,
@@ -48,8 +40,9 @@ class ProductDetailView extends Component {
       detailImgUrls,
       options,
     } = this.props;
-    const { optionPrice, optionQuantity } = this.state;
-    const finalPrice = optionPrice * optionQuantity;
+    const { selectedOptionId, quantity } = this.state;
+    const selectedOption = options.find(o => o.id === selectedOptionId);
+    const finalPrice = selectedOption && selectedOption.price * quantity;
     return (
       <React.Fragment>
         <ul className={s.info}>
@@ -63,22 +56,22 @@ class ProductDetailView extends Component {
           className={s.cartForm}
           onSubmit={e => {
             e.preventDefault();
-            const { optionId, optionQuantity } = this.state;
-            if (optionId === '') {
+            const { selectedOptionId, quantity } = this.state;
+            if (selectedOptionId === '') {
               alert('choose an option.');
-            } else if (optionQuantity < 1) {
+            } else if (quantity < 1) {
               alert('choose more than 1 piece');
             } else {
-              this.props.onCreateCartItem(optionId, optionQuantity);
+              this.props.onCreateCartItem(selectedOptionId, quantity);
             }
           }}
         >
           <label>가격</label>
-          <p>{optionPrice} 원</p>
+          <p>{options[0].price} 원</p>
           <label>선택</label>
           <select
             name="options"
-            value={this.state.optionId}
+            value={this.state.selectedOptionId}
             onChange={this.handleOptionChange}
           >
             <option disabled value="">
@@ -94,7 +87,7 @@ class ProductDetailView extends Component {
           <input
             type="number"
             name="quantity"
-            value={this.state.optionQuantity}
+            value={this.state.quantity}
             onChange={this.handleQtyChange}
           />
           <label>최종 가격</label>

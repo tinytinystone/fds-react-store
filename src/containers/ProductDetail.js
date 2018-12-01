@@ -41,7 +41,12 @@ export default class ProductDetail extends Component {
     });
   }
   handleCreateCartItem = async (optionId, quantity) => {
-    alert('장바구니 테스트: ' + optionId + quantity);
+    await api.post('cartItems', {
+      optionId,
+      quantity,
+      ordered: false,
+    });
+    alert('장바구니에 담겼습니다.');
   };
   render() {
     return (
