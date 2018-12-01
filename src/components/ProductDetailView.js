@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import withLoading from '../hoc/withLoading';
+import s from './ProductDetailView.module.scss';
 
 class ProductDetailView extends Component {
   static defaultProps = {
@@ -51,37 +52,17 @@ class ProductDetailView extends Component {
     const finalPrice = optionPrice * optionQuantity;
     return (
       <React.Fragment>
-        <div>{id}</div>
-        <div>{title}</div>
-        <div>{description}</div>
-        <img src={mainImgUrl} alt={title} />
-        <label>옵션</label>
-        <select
-          name="options"
-          value={this.state.optionId}
-          onChange={this.handleOptionChange}
-        >
-          <option disabled value="">
-            옵션을 선택하세요
-          </option>
-          {options.map(o => (
-            <option key={o.id} value={o.id}>
-              {o.title}
-            </option>
-          ))}
-        </select>
-        <label>
-          수량
-          <input
-            type="number"
-            name="quantity"
-            value={this.state.optionQuantity}
-            onChange={this.handleQtyChange}
-          />
-        </label>
-        <span>{finalPrice} 원</span>
-        <button
-          onClick={() => {
+        <ul className={s.info}>
+          <li>
+            <img src={mainImgUrl} alt={title} />
+          </li>
+          <li>{title}</li>
+          <li>{description}</li>
+        </ul>
+        <form
+          className={s.cartForm}
+          onSubmit={e => {
+            e.preventDefault();
             const { optionId, optionQuantity } = this.state;
             if (optionId === '') {
               alert('choose an option.');
@@ -92,10 +73,36 @@ class ProductDetailView extends Component {
             }
           }}
         >
-          장바구니
-        </button>
+          <label>가격</label>
+          <p>{optionPrice} 원</p>
+          <label>선택</label>
+          <select
+            name="options"
+            value={this.state.optionId}
+            onChange={this.handleOptionChange}
+          >
+            <option disabled value="">
+              옵션을 선택하세요
+            </option>
+            {options.map(o => (
+              <option key={o.id} value={o.id}>
+                {o.title}
+              </option>
+            ))}
+          </select>
+          <label>수량</label>
+          <input
+            type="number"
+            name="quantity"
+            value={this.state.optionQuantity}
+            onChange={this.handleQtyChange}
+          />
+          <label>최종 가격</label>
+          <p>{finalPrice} 원</p>
+          <button>장바구니에 넣기</button>
+        </form>
         {detailImgUrls.map(url => (
-          <img src={url} alt={title} key={id} />
+          <img src={url} alt={title} key={id} className={s.detailImg} />
         ))}
       </React.Fragment>
     );

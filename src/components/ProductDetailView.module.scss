@@ -1,0 +1,57 @@
+@import '../common.scss';
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+.info li:first-child {
+  display: block;
+  max-width: 370px;
+  margin: 0 auto;
+}
+.info li:nth-child(2) {
+  font-weight: 900;
+  font-size: 2rem;
+  padding: 1rem;
+}
+.info li:last-child {
+  padding: 1rem;
+  color: #aaaaaa;
+}
+.cartForm {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.cartForm * {
+  display: block;
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid black;
+}
+.cartForm label {
+  width: 30%;
+}
+.cartForm p,
+select,
+input {
+  width: 70%;
+}
+.cartForm button {
+  padding: 1rem;
+  width: 100%;
+  font-weight: 900;
+}
+.detailImg {
+  max-width: 380px;
+}
+.cartForm .pageRoute span {
+  display: inline-block;
+  padding: 5px 0 5px 3px;
+}
+.page-route span::after {
+  content: ' > ';
+  padding: 0 3px 0 4px;
+}
+.page-route span:last-child::after {
+  content: '';
+}
