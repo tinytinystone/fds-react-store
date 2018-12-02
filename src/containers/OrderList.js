@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import OrderListView from '../components/OrderListView';
 import api from '../api';
-import { withUser } from '../contexts/UserContext';
 
 class OrderList extends Component {
   constructor(props) {
@@ -34,8 +33,27 @@ class OrderList extends Component {
     });
   }
   render() {
-    return <OrderListView {...this.state} />;
+    const { orders, options } = this.state;
+    const orderList = orders.map(order => {
+      const { id, orderTime, cartItems } = order;
+      const result = { orderId: id, orderTime, orderDetail: [] };
+      cartItems.map(cartItem => {
+        const { title, price, product } = options.find(
+          option => option.id === cartItem.optionId
+        );
+        return result.orderDetail.push({
+          title: product.title,
+          mainImg: product.mainImgUrl,
+          optionTitle: title,
+          price,
+          quantity: cartItem.quantity,
+        });
+      });
+      console.log(result);
+      return result;
+    });
+    return <OrderListView orderList={orderList} />;
   }
 }
 
-export default withUser(OrderList);
+export default OrderList;

@@ -17,25 +17,27 @@ export default class CartListView extends Component {
       { id: null, title: '', description: '', mainImgUrl: '', options: [] },
     ],
   };
+  renderItem(cartItem) {
+    const { products } = this.props;
+    const { quantity, option } = cartItem;
+    const { mainImgUrl, title } = products.find(
+      p => cartItem.option.productId === p.id
+    );
+    return (
+      <article key={cartItem.id} className={s.cartItem}>
+        <h3>{title}</h3>
+        <img src={mainImgUrl} alt={title} />
+        <span>{option.price}</span>
+        <span>{option.title}</span>
+        <span>{quantity}</span>
+      </article>
+    );
+  }
   render() {
-    const { carts, products, handleClick } = this.props;
+    const { carts, handleClick } = this.props;
     return (
       <section>
-        {carts.map(c => {
-          const { quantity, option } = c;
-          const { mainImgUrl, title } = products.find(
-            p => c.option.productId === p.id
-          );
-          return (
-            <article key={c.id} className={s.cartItem}>
-              <h3>{title}</h3>
-              <img src={mainImgUrl} alt={title} />
-              <span>{option.price}</span>
-              <span>{option.title}</span>
-              <span>{quantity}</span>
-            </article>
-          );
-        })}
+        {carts.map(c => this.renderItem(c))}
         <button onClick={handleClick}>주문하기</button>
       </section>
     );

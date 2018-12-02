@@ -1,0 +1,24 @@
+@import '../common.scss';
+
+.orderItem {
+  position: relative;
+  width: 380px;
+  height: 200px;
+  background-color: lime;
+}
+.mainImg {
+  width: 90px;
+  float: left;
+}
+.price {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-weight: 900;
+}
+.title {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  font-weight: 900;
+}
