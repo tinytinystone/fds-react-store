@@ -10,6 +10,7 @@ import { UserProvider } from './contexts/UserContext';
 
 import s from './App.module.scss';
 import RegisterPage from './pages/RegisterPage';
+import OrderPage from './pages/OrderPage';
 
 export default class App extends Component {
   render() {
@@ -26,6 +27,7 @@ export default class App extends Component {
               <Route exact path="/product" component={HomePage} />
               <Route path="/product/:productId" component={ProductPage} />
               <Route path="/cart" component={CartPage} />
+              <Route path="/order" component={OrderPage} />
               <Redirect from="/" to="/product" />
             </Switch>
           </div>

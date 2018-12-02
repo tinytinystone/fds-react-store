@@ -1,0 +1,19 @@
+@import '../common.scss';
+
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.listItem {
+  display: flex;
+  flex-direction: column;
+  max-width: 180px;
+  background-color: lime;
+}
+.listItem * {
+  display: block;
+}
+.listItem img {
+  width: 180px;
+}

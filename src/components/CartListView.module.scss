@@ -1,0 +1,20 @@
+@import '../common.scss';
+
+.cart {
+  display: flex;
+  flex-direction: column;
+}
+.cartItem {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 380px;
+  max-height: 200px;
+  background-color: lime;
+}
+.cartItem * {
+  display: block;
+}
+.cartItem img {
+  width: 90px;
+}

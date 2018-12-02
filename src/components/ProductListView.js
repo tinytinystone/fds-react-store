@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import s from './ProductListView.module.scss';
 
 import withLoading from '../hoc/withLoading';
 
@@ -12,26 +13,19 @@ class ProductListView extends Component {
       // imgUrl: '...',
     ],
   };
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentCategory: '',
-    };
-  }
   render() {
     const { products } = this.props;
     return (
-      <ul>
+      <section className={s.list}>
         {products.map(p => (
-          <li key={p.id}>
-            <div>{p.id}</div>
+          <article key={p.id} className={s.listItem}>
             <Link to={`/product/${p.id}`}>
-              <div>{p.title}</div>
+              <h3>{p.title}</h3>
+              <img src={p.imgUrl} alt={p.title} />
             </Link>
-            <img src={p.imgUrl} alt={p.title} />
-          </li>
+          </article>
         ))}
-      </ul>
+      </section>
     );
   }
 }

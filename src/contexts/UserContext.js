@@ -50,7 +50,7 @@ export default class UserProvider extends Component {
       },
     });
     console.log(res);
-    if (res.data[0].username) {
+    if (res.data.length > 0) {
       alert('동일한 아이디가 존재합니다.');
     } else {
       const res2 = await api.post('/users/register', {
