@@ -1,64 +1,91 @@
 import React, { Component } from 'react';
 import s from './CartListView.module.scss';
+import withLoading from '../hoc/withLoading';
 
-export default class CartListView extends Component {
-  static defaultProps = {
-    carts: [
-      {
-        id: 1,
-        userId: 2,
-        optionId: 1,
-        quantity: 2,
-        ordered: true,
-        orderId: 1,
-      },
-    ],
-    products: [
-      { id: null, title: '', description: '', mainImgUrl: '', options: [] },
-    ],
-  };
-  handleOptionChange = e => {
-    const selectedOptionId = parseInt(e.target.value);
-    this.setState({
-      selectedOptionId,
-      quantity: 1,
+class CartListView extends Component {
+  constructor(props) {
+    super(props);
+
+    // !! props로부터 state를 계산해내고 싶은 경우
+    // 생성자에서 해당 작업을 해주면 된다.
+    // 다만, props가 단 한번만 내려올 때만 이 방식이 가능하다.
+
+    const { carts, products } = props;
+    console.log(this.props);
+    const productsInCarts = carts.map(cart => {
+      const { quantity, option } = cart;
+      const { mainImgUrl, title } = products.find(
+        product => cart.option.productId === product.id
+      );
+      const obj = {
+        cartId: cart.id,
+        title,
+        price: option.price,
+        mainImgUrl,
+        quantity,
+        optionTitle: option.title,
+        checked: true,
+      };
+      return obj;
     });
-  };
+
+    this.state = {
+      productsInCarts,
+    };
+  }
   handleQtyChange = e => {
+    e.preventDefault();
     const quantity = parseInt(e.target.value);
     this.setState({
       quantity,
     });
   };
-  renderItem(cartItem) {
-    const { products } = this.props;
-    const { quantity, option } = cartItem;
-    const { mainImgUrl, title } = products.find(
-      p => cartItem.option.productId === p.id
-    );
+  handleCheck = e => {
+    // e.preventDefault(); // 흑흑 슬퍼요
+    const { productsInCarts } = this.state;
+    const cartId = parseInt(e.target.value);
+    // console.log('cartId: ', cartId);
+    const newProductsInCarts = productsInCarts.map(p => {
+      if (p.cartId === cartId) {
+        p.checked = e.target.checked;
+      }
+      return p;
+    });
+    // console.log('newProductsInCarts', newProductsInCarts);
+    this.setState({ productsInCarts: newProductsInCarts });
+  };
+  renderItem(productInCart) {
+    const {
+      cartId,
+      title,
+      price,
+      mainImgUrl,
+      quantity,
+      optionTitle,
+      checked,
+    } = productInCart;
+    // console.log('cartId', cartId, 'checked', checked);
     return (
-      <article key={cartItem.id} className={s.cartItem}>
+      <article key={cartId} className={s.cartItem}>
+        <input
+          type="checkbox"
+          checked={checked}
+          value={cartId}
+          onChange={this.handleCheck}
+        />
         <img src={mainImgUrl} alt={title} />
         <h3>{title}</h3>
-        <span>{option.price * quantity}</span>
-        <div>
-          <select
-            name="options"
-            value={option.id}
-            onChange={this.handleOptionChange}
-          >
-            <option value="1">{option.title}</option>
-          </select>
-          <input
-            type="number"
-            name="quantity"
-            value={quantity}
-            onChange={this.handleQtyChange}
-          />
-        </div>
+        <span>{price * quantity}</span>
+        <span>{optionTitle}</span>
+        <input
+          type="number"
+          name="quantity"
+          value={quantity}
+          onChange={e => this.handleQtyChange(e)}
+        />
         <button
           onClick={e => {
-            this.props.deleteItem(cartItem.id);
+            this.props.deleteItem(cartId);
           }}
         >
           삭제
@@ -67,12 +94,15 @@ export default class CartListView extends Component {
     );
   }
   render() {
-    const { carts, handleClick } = this.props;
+    const { handleClick } = this.props;
+    const { productsInCarts } = this.state;
     return (
       <section>
-        {carts.map(c => this.renderItem(c))}
+        {productsInCarts.map(p => this.renderItem(p))}
         <button onClick={handleClick}>주문하기</button>
       </section>
     );
   }
 }
+
+export default withLoading(CartListView);

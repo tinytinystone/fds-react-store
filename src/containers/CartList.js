@@ -19,8 +19,8 @@ export default class CartList extends Component {
       products: [],
     };
   }
-  componentDidMount() {
-    this.refreshCartItems();
+  async componentDidMount() {
+    await this.refreshCartItems();
   }
   refreshCartItems = async () => {
     const { data: cartItems } = await api.get('cartItems/', {
@@ -66,19 +66,19 @@ export default class CartList extends Component {
     this.setState({
       carts: [],
       products: [],
+      loading: false,
     });
   };
   render() {
-    const { carts, products } = this.state;
+    const { carts, products, loading } = this.state;
     return (
-      <div>
-        <CartListView
-          carts={carts}
-          products={products}
-          handleClick={this.handleClick}
-          deleteItem={this.deleteItem}
-        />
-      </div>
+      <CartListView
+        loading={loading}
+        carts={carts}
+        products={products}
+        handleClick={this.handleClick}
+        deleteItem={this.deleteItem}
+      />
     );
   }
 }
