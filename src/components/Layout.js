@@ -11,7 +11,9 @@ export default class Layout extends Component {
         <Header />
         <Navigation />
         <main className={s.main}>{this.props.children}</main>
-        <footer>footer</footer>
+        <footer className={s.footer}>
+          <p>© 2018 PUFFIN</p>
+        </footer>
       </React.Fragment>
     );
   }

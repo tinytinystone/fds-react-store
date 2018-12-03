@@ -17,7 +17,7 @@ class ProductListView extends Component {
     super(props);
     this.state = {
       currentPage: 1,
-      productsPerPage: 8,
+      productsPerPage: 6,
     };
   }
   handleClick = e => {

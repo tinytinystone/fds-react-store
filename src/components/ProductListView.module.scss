@@ -24,11 +24,12 @@
   font-weight: 900;
 }
 .pageNumbers {
-  display: flex;
+  margin: 1rem;
+  text-align: center;
 }
 .pageNumbers > li {
-  margin-right: 0.3em;
-  color: blue;
-  user-select: none;
+  display: inline-block;
+  padding: 1rem;
+  margin-right: 1em;
   cursor: pointer;
 }
