@@ -17,6 +17,19 @@ export default class CartListView extends Component {
       { id: null, title: '', description: '', mainImgUrl: '', options: [] },
     ],
   };
+  handleOptionChange = e => {
+    const selectedOptionId = parseInt(e.target.value);
+    this.setState({
+      selectedOptionId,
+      quantity: 1,
+    });
+  };
+  handleQtyChange = e => {
+    const quantity = parseInt(e.target.value);
+    this.setState({
+      quantity,
+    });
+  };
   renderItem(cartItem) {
     const { products } = this.props;
     const { quantity, option } = cartItem;
@@ -27,9 +40,22 @@ export default class CartListView extends Component {
       <article key={cartItem.id} className={s.cartItem}>
         <img src={mainImgUrl} alt={title} />
         <h3>{title}</h3>
-        <span>{option.price}</span>
-        <span>{option.title}</span>
-        <span>{quantity}</span>
+        <span>{option.price * quantity}</span>
+        <div>
+          <select
+            name="options"
+            value={option.id}
+            onChange={this.handleOptionChange}
+          >
+            <option value="1">{option.title}</option>
+          </select>
+          <input
+            type="number"
+            name="quantity"
+            value={quantity}
+            onChange={this.handleQtyChange}
+          />
+        </div>
         <button
           onClick={e => {
             this.props.deleteItem(cartItem.id);
