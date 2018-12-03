@@ -49,7 +49,6 @@ class OrderList extends Component {
           quantity: cartItem.quantity,
         });
       });
-      console.log(result);
       return result;
     });
     return <OrderListView orderList={orderList} />;

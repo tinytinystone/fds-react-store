@@ -36,7 +36,6 @@ export default class ProductList extends Component {
       imgUrl: p.mainImgUrl,
       price: p.options[0].price,
     }));
-    console.log(productsList);
     return (
       <div>
         <ProductListView products={productsList} />

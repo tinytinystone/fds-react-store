@@ -19,7 +19,10 @@ export default class CartList extends Component {
       products: [],
     };
   }
-  async componentDidMount() {
+  componentDidMount() {
+    this.refreshCartItems();
+  }
+  refreshCartItems = async () => {
     const { data: cartItems } = await api.get('cartItems/', {
       params: {
         ordered: false,
@@ -38,12 +41,17 @@ export default class CartList extends Component {
       products,
       loading: false,
     });
-  }
+  };
   orderCartItems = async (cartItemId, orderId) => {
     await api.patch('/cartItems/' + cartItemId, {
       ordered: true,
       orderId,
     });
+  };
+  deleteItem = async cartItemId => {
+    await api.delete('cartItems/' + cartItemId);
+    alert('해당 항목이 삭제 되었습니다.');
+    this.refreshCartItems();
   };
   handleClick = async () => {
     const {
@@ -68,6 +76,7 @@ export default class CartList extends Component {
           carts={carts}
           products={products}
           handleClick={this.handleClick}
+          deleteItem={this.deleteItem}
         />
       </div>
     );

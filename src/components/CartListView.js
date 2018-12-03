@@ -25,11 +25,18 @@ export default class CartListView extends Component {
     );
     return (
       <article key={cartItem.id} className={s.cartItem}>
-        <h3>{title}</h3>
         <img src={mainImgUrl} alt={title} />
+        <h3>{title}</h3>
         <span>{option.price}</span>
         <span>{option.title}</span>
         <span>{quantity}</span>
+        <button
+          onClick={e => {
+            this.props.deleteItem(cartItem.id);
+          }}
+        >
+          삭제
+        </button>
       </article>
     );
   }

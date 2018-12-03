@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 function OrderItem(props) {
   const { orderTime, orderDetail } = props.order;
-  console.log(props);
   return (
     <section className={s.order}>
       <h3>{orderTime}</h3>
