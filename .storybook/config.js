@@ -1,7 +1,6 @@
 import { configure, addDecorator } from '@storybook/react';
 import StoryRouter from 'storybook-react-router';
 
-import 'semantic-ui-css/semantic.min.css';
 import '../src/index.scss';
 
 addDecorator(StoryRouter());
