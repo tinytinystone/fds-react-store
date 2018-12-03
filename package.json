@@ -38,6 +38,6 @@
     "babel-loader": "^8.0.4",
     "eslint-plugin-prettier": "^3.0.0",
     "prettier": "^1.15.2",
-    "storybook-react-router": "^1.0.1"
+    "storybook-react-router": "^1.0.2"
   }
 }
