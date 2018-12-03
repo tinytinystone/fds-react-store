@@ -13,19 +13,56 @@ class ProductListView extends Component {
       // imgUrl: '...',
     ],
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPage: 1,
+      productsPerPage: 8,
+    };
+  }
+  handleClick = e => {
+    this.setState({
+      currentPage: Number(e.target.id),
+    });
+  };
   render() {
     const { products } = this.props;
+    const { currentPage, productsPerPage } = this.state;
+
+    const indexOfLastItem = currentPage * productsPerPage;
+    const indexOfFirstItem = indexOfLastItem - productsPerPage;
+    const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+
+    const renderProducts = currentProducts.map(p => {
+      return (
+        <article key={p.id} className={s.listItem}>
+          <Link to={`/product/${p.id}`}>
+            <img src={p.imgUrl} alt={p.title} />
+            <h3>{p.title}</h3>
+            <p className={s.price}>{p.price} 원</p>
+          </Link>
+        </article>
+      );
+    });
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    const renderPageNumbers = pageNumbers.map(number => {
+      return (
+        <li key={number} id={number} onClick={this.handleClick}>
+          {number}
+        </li>
+      );
+    });
+
     return (
-      <section className={s.list}>
-        {products.map(p => (
-          <article key={p.id} className={s.listItem}>
-            <Link to={`/product/${p.id}`}>
-              <h3>{p.title}</h3>
-              <img src={p.imgUrl} alt={p.title} />
-            </Link>
-          </article>
-        ))}
-      </section>
+      <React.Fragment>
+        <section className={s.list}>{renderProducts}</section>
+        <ul className={s.pageNumbers}>{renderPageNumbers}</ul>
+      </React.Fragment>
     );
   }
 }

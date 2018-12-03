@@ -15,23 +15,17 @@ export default class ProductList extends Component {
 
   async componentDidMount() {
     const { category } = this.props;
-    const { data: products } = await api.get('/products', {
+    const res = await api.get('/products', {
       params: {
         category,
+        _embed: 'options',
       },
     });
     this.setState({
-      products,
+      products: res.data,
       loading: false,
       currentCategory: category,
     });
-    // } else {
-    //   const { data: products } = await api.get('/products');
-    //   this.setState({
-    //     products,
-    //     loading: false,
-    //   });
-    // }
   }
 
   render() {
@@ -40,7 +34,9 @@ export default class ProductList extends Component {
       title: p.title,
       id: p.id,
       imgUrl: p.mainImgUrl,
+      price: p.options[0].price,
     }));
+    console.log(productsList);
     return (
       <div>
         <ProductListView products={productsList} />
