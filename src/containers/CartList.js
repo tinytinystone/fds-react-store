@@ -53,7 +53,7 @@ export default class CartList extends Component {
     alert('해당 항목이 삭제 되었습니다.');
     this.refreshCartItems();
   };
-  handleClick = async () => {
+  handleClick = async arr => {
     const {
       data: { id: orderId },
     } = await api.post('/orders', {

@@ -33,15 +33,19 @@ class CartListView extends Component {
       productsInCarts,
     };
   }
-  handleQtyChange = e => {
-    e.preventDefault();
-    const quantity = parseInt(e.target.value);
-    this.setState({
-      quantity,
+  handleQtyChange = (cartId, quantity) => {
+    const { productsInCarts } = this.state;
+    const newProductsInCarts = productsInCarts.map(p => {
+      if (p.cartId === cartId) {
+        p.quantity = quantity;
+      }
+      return p;
     });
+    this.setState({ productsInCarts: newProductsInCarts });
   };
   handleCheck = e => {
     // e.preventDefault(); // 흑흑 슬퍼요
+    // immer를 써보는 것으로
     const { productsInCarts } = this.state;
     const cartId = parseInt(e.target.value);
     // console.log('cartId: ', cartId);
@@ -53,6 +57,16 @@ class CartListView extends Component {
     });
     // console.log('newProductsInCarts', newProductsInCarts);
     this.setState({ productsInCarts: newProductsInCarts });
+  };
+  handleOrder = () => {
+    const newProductsInCarts = this.state.productsInCarts.filter(
+      p => p.checked === true
+    );
+    const newArr = [];
+    for (const p of newProductsInCarts) {
+      newArr.push(p.cartId);
+    }
+    this.props.handleClick(newArr);
   };
   renderItem(productInCart) {
     const {
@@ -81,7 +95,9 @@ class CartListView extends Component {
           type="number"
           name="quantity"
           value={quantity}
-          onChange={e => this.handleQtyChange(e)}
+          onChange={e =>
+            this.handleQtyChange(parseInt(cartId), parseInt(e.target.value))
+          }
         />
         <button
           onClick={e => {
@@ -94,12 +110,11 @@ class CartListView extends Component {
     );
   }
   render() {
-    const { handleClick } = this.props;
     const { productsInCarts } = this.state;
     return (
       <section>
         {productsInCarts.map(p => this.renderItem(p))}
-        <button onClick={handleClick}>주문하기</button>
+        <button onClick={this.handleOrder}>주문하기</button>
       </section>
     );
   }
