@@ -8,28 +8,74 @@ export default class ProductList extends Component {
 
     this.state = {
       currentCategory: '',
+      currentPage: '',
+      productsPerPage: 4,
       loading: true,
       products: [],
     };
   }
 
   async componentDidMount() {
-    const { category } = this.props;
-    const res = await api.get('/products', {
-      params: {
-        category,
-        _embed: 'options',
-      },
-    });
-    this.setState({
-      products: res.data,
-      loading: false,
-      currentCategory: category,
-    });
+    const { category, page } = this.props;
+    if (!!category && !!page) {
+      const res = await api.get('/products', {
+        params: {
+          category,
+          _embed: 'options',
+          _page: page,
+          _limit: this.state.productsPerPage,
+        },
+      });
+      this.setState({
+        products: res.data,
+        loading: false,
+        currentCategory: category,
+        currentPage: page,
+      });
+    } else if (!category && !!page) {
+      const res = await api.get('/products', {
+        params: {
+          _embed: 'options',
+          _page: page,
+          _limit: this.state.productsPerPage,
+        },
+      });
+      this.setState({
+        products: res.data,
+        loading: false,
+        currentCategory: category,
+        currentPage: page,
+      });
+    } else if (!!category && !page) {
+      const res = await api.get('/products', {
+        params: {
+          category,
+          _embed: 'options',
+        },
+      });
+      this.setState({
+        products: res.data,
+        loading: false,
+        currentCategory: category,
+        currentPage: page,
+      });
+    } else {
+      const res = await api.get('/products', {
+        params: {
+          _embed: 'options',
+        },
+      });
+      this.setState({
+        products: res.data,
+        loading: false,
+        currentCategory: category,
+        currentPage: page,
+      });
+    }
   }
 
   render() {
-    const { products } = this.state;
+    const { products, currentPage, productsPerPage } = this.state;
     const productsList = products.map(p => ({
       title: p.title,
       id: p.id,
@@ -38,7 +84,11 @@ export default class ProductList extends Component {
     }));
     return (
       <div>
-        <ProductListView products={productsList} />
+        <ProductListView
+          products={productsList}
+          currentPage={currentPage}
+          productsPerPage={productsPerPage}
+        />
       </div>
     );
   }

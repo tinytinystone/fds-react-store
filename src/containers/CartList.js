@@ -53,7 +53,7 @@ export default class CartList extends Component {
     this.setState({
       loading: true,
     });
-    await api.delete('cartItems/', cartItemId);
+    await api.delete('cartItems/' + cartItemId);
     alert('해당 항목이 삭제 되었습니다.');
     this.refreshCartItems();
   };

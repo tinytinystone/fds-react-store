@@ -7,9 +7,15 @@ export default class HomePage extends Component {
     const { location } = this.props;
     const p = new URLSearchParams(location.search);
     const category = p.get('category');
+    const page = p.get('page');
     return (
       <Layout>
-        <ProductList key={category} category={category} />
+        <ProductList
+          key={category + page}
+          category={category}
+          page={page}
+          currentLocation={location.pathname}
+        />
       </Layout>
     );
   }
