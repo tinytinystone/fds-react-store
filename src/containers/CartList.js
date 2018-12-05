@@ -19,8 +19,8 @@ export default class CartList extends Component {
       products: [],
     };
   }
-  async componentDidMount() {
-    await this.refreshCartItems();
+  componentDidMount() {
+    this.refreshCartItems();
   }
   refreshCartItems = async () => {
     const { data: cartItems } = await api.get('cartItems/', {
@@ -49,6 +49,9 @@ export default class CartList extends Component {
     });
   };
   deleteItem = async cartItemId => {
+    this.setState({
+      loading: true,
+    });
     await api.delete('cartItems/' + cartItemId);
     alert('해당 항목이 삭제 되었습니다.');
     this.refreshCartItems();
@@ -59,8 +62,13 @@ export default class CartList extends Component {
     } = await api.post('/orders', {
       orderTime: Date.now(), // 현재 시각을 나타내는 정수
     });
-    this.state.carts.forEach(c => {
-      this.orderCartItems(c.id, orderId);
+    console.log('orderId: ', orderId);
+    arr.forEach(cartId => {
+      this.state.carts.forEach(cart => {
+        if (cart.id === parseInt(cartId)) {
+          this.orderCartItems(cart.id, orderId);
+        }
+      });
     });
     alert('주문이 완료 되었습니다.');
     this.setState({

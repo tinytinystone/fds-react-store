@@ -17,7 +17,7 @@ class CartListView extends Component {
       const { mainImgUrl, title } = products.find(
         product => cart.option.productId === product.id
       );
-      const obj = {
+      return {
         cartId: cart.id,
         title,
         price: option.price,
@@ -26,7 +26,6 @@ class CartListView extends Component {
         optionTitle: option.title,
         checked: true,
       };
-      return obj;
     });
 
     this.state = {
