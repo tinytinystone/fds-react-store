@@ -32,7 +32,7 @@ class CartListView extends Component {
       productsInCarts,
     };
   }
-  handleQtyChange = (cartId, quantity) => {
+  changeQuantity = (cartId, quantity) => {
     const { productsInCarts } = this.state;
     const newProductsInCarts = productsInCarts.map(p => {
       if (p.cartId === cartId) {
@@ -57,15 +57,18 @@ class CartListView extends Component {
     // console.log('newProductsInCarts', newProductsInCarts);
     this.setState({ productsInCarts: newProductsInCarts });
   };
-  handleOrder = () => {
+  goToOrder = () => {
     const newProductsInCarts = this.state.productsInCarts.filter(
       p => p.checked === true
     );
     const newArr = [];
     for (const p of newProductsInCarts) {
-      newArr.push(p.cartId);
+      newArr.push({
+        id: p.cartId,
+        quantity: p.quantity,
+      });
     }
-    this.props.handleClick(newArr);
+    this.props.handleOrderClick(newArr);
   };
   renderItem(productInCart) {
     const {
@@ -95,7 +98,7 @@ class CartListView extends Component {
           name="quantity"
           value={quantity}
           onChange={e =>
-            this.handleQtyChange(parseInt(cartId), parseInt(e.target.value))
+            this.changeQuantity(parseInt(cartId), parseInt(e.target.value))
           }
         />
         <button
@@ -113,7 +116,7 @@ class CartListView extends Component {
     return (
       <section>
         {productsInCarts.map(p => this.renderItem(p))}
-        <button onClick={this.handleOrder}>주문하기</button>
+        <button onClick={this.goToOrder}>주문하기</button>
       </section>
     );
   }

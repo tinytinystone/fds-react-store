@@ -42,9 +42,10 @@ export default class CartList extends Component {
       loading: false,
     });
   };
-  orderCartItems = async (cartItemId, orderId) => {
+  orderCartItems = async (cartItemId, quantity, orderId) => {
     await api.patch('/cartItems/' + cartItemId, {
       ordered: true,
+      quantity,
       orderId,
     });
   };
@@ -52,21 +53,25 @@ export default class CartList extends Component {
     this.setState({
       loading: true,
     });
-    await api.delete('cartItems/' + cartItemId);
+    await api.delete('cartItems/', cartItemId);
     alert('해당 항목이 삭제 되었습니다.');
     this.refreshCartItems();
   };
-  handleClick = async arr => {
+  handleOrderClick = async arr => {
+    this.setState({ loading: true });
     const {
       data: { id: orderId },
     } = await api.post('/orders', {
       orderTime: Date.now(), // 현재 시각을 나타내는 정수
     });
-    console.log('orderId: ', orderId);
-    arr.forEach(cartId => {
+    arr.forEach(idAndQuantity => {
       this.state.carts.forEach(cart => {
-        if (cart.id === parseInt(cartId)) {
-          this.orderCartItems(cart.id, orderId);
+        if (cart.id === parseInt(idAndQuantity.id)) {
+          this.orderCartItems(
+            cart.id,
+            parseInt(idAndQuantity.quantity),
+            orderId
+          );
         }
       });
     });
@@ -84,7 +89,7 @@ export default class CartList extends Component {
         loading={loading}
         carts={carts}
         products={products}
-        handleClick={this.handleClick}
+        handleOrderClick={this.handleOrderClick}
         deleteItem={this.deleteItem}
       />
     );
