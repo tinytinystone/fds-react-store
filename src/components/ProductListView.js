@@ -14,24 +14,26 @@ class ProductListView extends Component {
     ],
     currentPage: 1,
     productsPerPage: 0,
+    totalProducts: 0,
   };
   constructor(props) {
     super(props);
-    const { products, currentPage, productsPerPage } = this.props;
+    const {
+      products,
+      currentPage,
+      productsPerPage,
+      totalProducts,
+    } = this.props;
 
-    const indexOfLastItem = currentPage * productsPerPage;
-    const indexOfFirstItem = indexOfLastItem - productsPerPage;
-
-    const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+    for (let i = 1; i <= Math.ceil(totalProducts / productsPerPage); i++) {
       pageNumbers.push(i);
     }
     this.state = {
-      currentProducts,
       pageNumbers,
     };
   }
+
   renderItems = p => {
     return (
       <article key={p.id} className={s.listItem}>
@@ -43,21 +45,42 @@ class ProductListView extends Component {
       </article>
     );
   };
+
   renderPages = number => {
-    return (
-      <Link to={`/products?_page=${number}`} key={number}>
-        <li key={number} id={number} onClick={this.handleClick}>
-          {number}
-        </li>
-      </Link>
-    );
+    const { currentCategory } = this.props;
+    const noCategoryLink = `/product/?_page=${number}`;
+    const withCategoryLink = `/product/?category=${currentCategory}&_page=${number}`;
+    if (currentCategory == null) {
+      return (
+        <Link to={noCategoryLink}>
+          <li key={number} id={number} onClick={this.handleClick}>
+            {number}
+          </li>
+        </Link>
+      );
+    } else {
+      return (
+        <Link to={withCategoryLink}>
+          <li key={number} id={number} onClick={this.handleClick}>
+            {number}
+          </li>
+        </Link>
+      );
+    }
   };
   render() {
+    const {
+      products,
+      currentPage,
+      productsPerPage,
+      totalProducts,
+      currentCategory,
+    } = this.props;
     const { currentProducts, pageNumbers } = this.state;
     return (
       <React.Fragment>
         <section className={s.list}>
-          {currentProducts.map(p => this.renderItems(p))}
+          {products.map(p => this.renderItems(p))}
         </section>
         <ul className={s.pageNumbers}>
           {pageNumbers.map(number => this.renderPages(number))}

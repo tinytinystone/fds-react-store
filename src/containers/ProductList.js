@@ -11,6 +11,7 @@ export default class ProductList extends Component {
       currentPage: '',
       productsPerPage: 4,
       loading: true,
+      totalProducts: 0,
       products: [],
     };
   }
@@ -18,64 +19,69 @@ export default class ProductList extends Component {
   async componentDidMount() {
     const { category, page } = this.props;
     if (!!category && !!page) {
-      const res = await api.get('/products', {
-        params: {
-          category,
-          _embed: 'options',
-          _page: page,
-          _limit: this.state.productsPerPage,
-        },
-      });
+      const res = await api.get(
+        `/products/?category=${category}&_embed=options&_page=${page}&_limit=${
+          this.state.productsPerPage
+        }`
+      );
       this.setState({
         products: res.data,
-        loading: false,
         currentCategory: category,
         currentPage: page,
+        totalProducts: parseInt(res.headers['x-total-count']),
+        loading: false,
       });
     } else if (!category && !!page) {
-      const res = await api.get('/products', {
-        params: {
-          _embed: 'options',
-          _page: page,
-          _limit: this.state.productsPerPage,
-        },
-      });
+      const res = await api.get(
+        `/products/?_embed=options&_page=${page}&_limit=${
+          this.state.productsPerPage
+        }`
+      );
       this.setState({
         products: res.data,
-        loading: false,
         currentCategory: category,
         currentPage: page,
+        totalProducts: parseInt(res.headers['x-total-count']),
+        loading: false,
       });
     } else if (!!category && !page) {
-      const res = await api.get('/products', {
-        params: {
-          category,
-          _embed: 'options',
-        },
-      });
+      const res = await api.get(
+        `/products/?category=${category}&_embed=options&_page=1&_limit=${
+          this.state.productsPerPage
+        }`
+      );
       this.setState({
         products: res.data,
-        loading: false,
         currentCategory: category,
         currentPage: page,
+        totalProducts: parseInt(res.headers['x-total-count']),
+        loading: false,
       });
     } else {
-      const res = await api.get('/products', {
-        params: {
-          _embed: 'options',
-        },
-      });
+      const res = await api.get(
+        `/products/?_embed=options&_page=$1&_limit=${
+          this.state.productsPerPage
+        }`
+      );
       this.setState({
         products: res.data,
-        loading: false,
         currentCategory: category,
         currentPage: page,
+        totalProducts: parseInt(res.headers['x-total-count']),
+        loading: false,
       });
     }
   }
 
   render() {
-    const { products, currentPage, productsPerPage } = this.state;
+    const {
+      products,
+      currentPage,
+      productsPerPage,
+      totalProducts,
+      currentCategory,
+      loading,
+    } = this.state;
     const productsList = products.map(p => ({
       title: p.title,
       id: p.id,
@@ -88,6 +94,9 @@ export default class ProductList extends Component {
           products={productsList}
           currentPage={currentPage}
           productsPerPage={productsPerPage}
+          totalProducts={totalProducts}
+          currentCategory={currentCategory}
+          loading={loading}
         />
       </div>
     );

@@ -11,7 +11,6 @@ class CartListView extends Component {
     // 다만, props가 단 한번만 내려올 때만 이 방식이 가능하다.
 
     const { carts, products } = props;
-    console.log(this.props);
     const productsInCarts = carts.map(cart => {
       const { quantity, option } = cart;
       const { mainImgUrl, title } = products.find(
@@ -47,14 +46,12 @@ class CartListView extends Component {
     // immer를 써보는 것으로
     const { productsInCarts } = this.state;
     const cartId = parseInt(e.target.value);
-    // console.log('cartId: ', cartId);
     const newProductsInCarts = productsInCarts.map(p => {
       if (p.cartId === cartId) {
         p.checked = e.target.checked;
       }
       return p;
     });
-    // console.log('newProductsInCarts', newProductsInCarts);
     this.setState({ productsInCarts: newProductsInCarts });
   };
   goToOrder = () => {
@@ -80,7 +77,6 @@ class CartListView extends Component {
       optionTitle,
       checked,
     } = productInCart;
-    // console.log('cartId', cartId, 'checked', checked);
     return (
       <article key={cartId} className={s.cartItem}>
         <input
