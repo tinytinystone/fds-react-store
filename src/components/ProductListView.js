@@ -18,12 +18,7 @@ class ProductListView extends Component {
   };
   constructor(props) {
     super(props);
-    const {
-      products,
-      currentPage,
-      productsPerPage,
-      totalProducts,
-    } = this.props;
+    const { productsPerPage, totalProducts } = this.props;
 
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(totalProducts / productsPerPage); i++) {
@@ -52,31 +47,21 @@ class ProductListView extends Component {
     const withCategoryLink = `/product/?category=${currentCategory}&_page=${number}`;
     if (currentCategory == null) {
       return (
-        <Link to={noCategoryLink}>
-          <li key={number} id={number} onClick={this.handleClick}>
-            {number}
-          </li>
-        </Link>
+        <li key={number} id={number} onClick={this.handleClick}>
+          <Link to={noCategoryLink}>{number}</Link>
+        </li>
       );
     } else {
       return (
-        <Link to={withCategoryLink}>
-          <li key={number} id={number} onClick={this.handleClick}>
-            {number}
-          </li>
-        </Link>
+        <li key={number} id={number} onClick={this.handleClick}>
+          <Link to={withCategoryLink}>{number}</Link>
+        </li>
       );
     }
   };
   render() {
-    const {
-      products,
-      currentPage,
-      productsPerPage,
-      totalProducts,
-      currentCategory,
-    } = this.props;
-    const { currentProducts, pageNumbers } = this.state;
+    const { products } = this.props;
+    const { pageNumbers } = this.state;
     return (
       <React.Fragment>
         <section className={s.list}>
