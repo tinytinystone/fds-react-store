@@ -12,7 +12,7 @@ export default class HomePage extends Component {
       <Layout>
         <ProductList
           page={page}
-          key={category + page}
+          key={p.toString()}
           category={category}
           currentLocation={location.pathname}
         />
