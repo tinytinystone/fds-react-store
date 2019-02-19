@@ -10,10 +10,6 @@ const emptyUserInfo = () => ({
   type: 'EMPTY_USER_INFO',
 });
 
-export const logoutSuccess = () => ({
-  type: 'LOGOUT_SUCCESS',
-});
-
 export const refreshUsers = () => async dispatch => {
   const response = await api.get('/me');
   const { username, id } = response.data;

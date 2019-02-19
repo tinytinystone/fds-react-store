@@ -3,19 +3,16 @@ import { Link, Redirect } from 'react-router-dom';
 
 import s from './HeaderView.module.scss';
 
-const HeaderView = ({ users: username, logout, logoutSuccess }) => {
-  if (logoutSuccess) {
-    return <Redirect to="/" />;
-  }
+const HeaderView = ({ users, logout, history }) => {
   return (
     <React.Fragment>
       <ul className={s.member}>
-        {username ? (
+        {users.username ? (
           <React.Fragment>
             <li
               onClick={() => {
                 logout();
-                this.setState({ logoutSuccess: true });
+                history.push('/');
               }}
               className={s.signOut}
             >

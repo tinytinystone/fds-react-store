@@ -13,16 +13,8 @@ const users = (state = {}, action) => {
         ...state,
         id: null,
         username: null,
+        logoutSuccess: true,
       };
-    default:
-      return state;
-  }
-};
-
-const userLogoutStatus = (state = false, action) => {
-  switch (action.type) {
-    case 'LOGOUT_SUCESS':
-      return true;
     default:
       return state;
   }
@@ -30,15 +22,10 @@ const userLogoutStatus = (state = false, action) => {
 
 const rootReducer = combineReducers({
   users,
-  userLogoutStatus,
 });
 
 export default rootReducer;
 
 export const getUsers = state => {
   return state.users;
-};
-
-export const getUserLogoutStatus = state => {
-  return state.userLogoutStatus;
 };

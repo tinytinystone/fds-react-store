@@ -33,14 +33,16 @@ export default class LoginForm extends Component {
     });
   };
   render() {
-    const { loginSuccess } = this.state;
-    if (loginSuccess) {
-      alert(`${this.state.usernameForLogin} 님 로그인에 성공했습니다`);
-      return <Redirect to="/" />;
-    }
     return (
       <React.Fragment>
-        <form onSubmit={this.handleSubmit} className={s.loginForm}>
+        <form
+          onSubmit={e => {
+            this.handleSubmit(e);
+            alert(`${this.state.usernameForLogin} 님 로그인에 성공했습니다`);
+            this.props.history.push('/');
+          }}
+          className={s.loginForm}
+        >
           <input
             type="text"
             name="username"

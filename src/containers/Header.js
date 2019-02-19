@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import HeaderView from '../components/HeaderView';
 import { connect } from 'react-redux';
-import { refreshUsers, logout } from '../actions';
-import { getUsers, getUserLogoutStatus } from '../reducers';
+
+import * as actions from '../actions';
+import { getUsers } from '../reducers';
+
+import HeaderView from '../components/HeaderView';
 
 class Header extends Component {
   componentDidMount() {
@@ -20,23 +22,14 @@ class Header extends Component {
 const mapStateToProps = (state, { history }) => {
   return {
     users: getUsers(state),
-    logoutSuccess: getUserLogoutStatus(state),
+    history,
   };
 };
-
-const mapDispatchToProps = dispatch => ({
-  refreshUsers() {
-    dispatch(refreshUsers());
-  },
-  logout() {
-    dispatch(logout());
-  },
-});
 
 Header = withRouter(
   connect(
     mapStateToProps,
-    mapDispatchToProps
+    actions
   )(Header)
 );
 

@@ -1,12 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import LoginFormView from '../components/LoginFormView';
-import { withUser } from '../contexts/UserContext';
+import { withRouter } from 'react-router-dom';
+import { login } from '../actions';
+import { connect } from 'react-redux';
 
-class LoginForm extends Component {
-  render() {
-    const { login } = this.props;
-    return <LoginFormView onLogin={login} />;
-  }
+function LoginForm({ login, history }) {
+  return <LoginFormView onLogin={login} history={history} />;
 }
 
-export default withUser(LoginForm);
+LoginForm = connect(
+  null,
+  { login }
+)(LoginForm);
+
+export default withRouter(LoginForm);
