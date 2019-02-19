@@ -1,16 +1,43 @@
-import React from 'react';
-import { UserConsumer } from '../contexts/UserContext';
-// import { withRouter } from 'react-router-dom';
-// import { withUser } from '../contexts/UserContext';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import HeaderView from '../components/HeaderView';
+import { connect } from 'react-redux';
+import { refreshUsers, logout } from '../actions';
+import { getUsers, getUserLogoutStatus } from '../reducers';
 
-export default function Header(props) {
-  return (
-    <UserConsumer>
-      {value => <HeaderView key={value.username} {...value} />}
-    </UserConsumer>
-  );
+class Header extends Component {
+  componentDidMount() {
+    if (localStorage.getItem('token')) {
+      this.props.refreshUsers();
+    }
+  }
+  render() {
+    const { username, ...rest } = this.props;
+    return <HeaderView key={username} username={username} {...rest} />;
+  }
 }
 
-// export default withRouter(withUser(HeaderView));
-// withRouter로 둘러싼 컴포넌트는 match, history, location prop을 받는다.
+const mapStateToProps = (state, { history }) => {
+  return {
+    users: getUsers(state),
+    logoutSuccess: getUserLogoutStatus(state),
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  refreshUsers() {
+    dispatch(refreshUsers());
+  },
+  logout() {
+    dispatch(logout());
+  },
+});
+
+Header = withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Header)
+);
+
+export default Header;
