@@ -1,12 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import RegisterFormView from '../components/RegisterFormView';
-import { withUser } from '../contexts/UserContext';
+import { withRouter } from 'react-router-dom';
+import { register } from '../actions';
+import { connect } from 'react-redux';
 
-class RegisterForm extends Component {
-  render() {
-    const { register } = this.props;
-    return <RegisterFormView onRegister={register} />;
-  }
+function RegisterForm({ register, history }) {
+  const onRegister = async (username, password) => {
+    await register(username, password);
+
+    alert(`${username} 님 회원가입에 성공했습니다`);
+
+    return history.push('/');
+  };
+  return <RegisterFormView onRegister={onRegister} history={history} />;
 }
 
-export default withUser(RegisterForm);
+RegisterForm = connect(
+  null,
+  { register }
+)(RegisterForm);
+
+export default withRouter(RegisterForm);

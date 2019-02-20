@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import s from './LoginFormView.module.scss';
 
 export default class LoginForm extends Component {
@@ -9,10 +9,6 @@ export default class LoginForm extends Component {
     const passwordForLogin = e.target.elements.password.value;
 
     await this.props.onLogin(usernameForLogin, passwordForLogin);
-
-    alert(`${usernameForLogin} 님 로그인에 성공했습니다`);
-
-    return this.props.history.push('/');
   };
   render() {
     return (
