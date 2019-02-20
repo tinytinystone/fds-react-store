@@ -1,7 +1,3 @@
-import api from '../api';
-
-// USER 관련
-
 const updateUserInfo = (username, id) => ({
   type: 'UPDATE_USER_INFO',
   username,
@@ -49,36 +45,4 @@ export const register = (username, password) => async dispatch => {
     localStorage.setItem('token', res2.data.token);
   }
   await dispatch(refreshUsers());
-};
-
-// ProductList 관련
-
-const requestProducts = (page, category) => ({
-  type: 'REQUEST_PRODUCTS',
-  page,
-  category,
-});
-
-const receiveProducts = (page, category, response) => ({
-  type: 'RECEIVE_PRODUCTS',
-  page,
-  category,
-  response,
-});
-
-export const fetchProducts = (
-  page,
-  category,
-  productsPerPage
-) => async dispatch => {
-  dispatch(requestProducts);
-
-  const hasCategory = category ? `category=${category}&` : '';
-  const hasPage = page ? `_page=${page}&_limit=${productsPerPage}` : '';
-
-  const response = await api.get(
-    `/products/?${hasCategory}_embed=options&${hasPage}`
-  );
-
-  return dispatch(receiveProducts(page, category, response));
 };

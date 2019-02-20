@@ -1,87 +1,21 @@
 import React, { Component } from 'react';
 import ProductListView from '../components/ProductListView';
 import api from '../api';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { dispatch } from 'rxjs/internal/observable/range';
+import { getProducts, getTotalProduct } from '../reducers';
+import * as actions from '../actions';
 
-export default class ProductList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentCategory: '',
-      currentPage: '',
-      productsPerPage: 4,
-      loading: true,
-      totalProducts: 0,
-      products: [],
-    };
-  }
-
-  async componentDidMount() {
-    const { category, page } = this.props;
-    if (!!category && !!page) {
-      const res = await api.get(
-        `/products/?category=${category}&_embed=options&_page=${page}&_limit=${
-          this.state.productsPerPage
-        }`
-      );
-      this.setState({
-        products: res.data,
-        currentCategory: category,
-        currentPage: page,
-        totalProducts: parseInt(res.headers['x-total-count']),
-        loading: false,
-      });
-    } else if (!category && !!page) {
-      const res = await api.get(
-        `/products/?_embed=options&_page=${page}&_limit=${
-          this.state.productsPerPage
-        }`
-      );
-      this.setState({
-        products: res.data,
-        currentCategory: category,
-        currentPage: page,
-        totalProducts: parseInt(res.headers['x-total-count']),
-        loading: false,
-      });
-    } else if (!!category && !page) {
-      const res = await api.get(
-        `/products/?category=${category}&_embed=options&_page=1&_limit=${
-          this.state.productsPerPage
-        }`
-      );
-      this.setState({
-        products: res.data,
-        currentCategory: category,
-        currentPage: page,
-        totalProducts: parseInt(res.headers['x-total-count']),
-        loading: false,
-      });
-    } else {
-      const res = await api.get(
-        `/products/?_embed=options&_page=$1&_limit=${
-          this.state.productsPerPage
-        }`
-      );
-      this.setState({
-        products: res.data,
-        currentCategory: category,
-        currentPage: page,
-        totalProducts: parseInt(res.headers['x-total-count']),
-        loading: false,
-      });
-    }
+class ProductList extends Component {
+  componentDidMount() {
+    const { page, category, productsPerPage, fetchProducts } = this.props;
+    fetchProducts(page, category, productsPerPage);
   }
 
   render() {
-    const {
-      products,
-      currentPage,
-      productsPerPage,
-      totalProducts,
-      currentCategory,
-      loading,
-    } = this.state;
+    const { products, page, productsPerPage, category } = this.props;
+    const totalProducts = products.length;
     const productsList = products.map(p => ({
       title: p.title,
       id: p.id,
@@ -92,13 +26,34 @@ export default class ProductList extends Component {
       <div>
         <ProductListView
           products={productsList}
-          currentPage={currentPage}
+          currentPage={page}
           productsPerPage={productsPerPage}
           totalProducts={totalProducts}
-          currentCategory={currentCategory}
-          loading={loading}
+          currentCategory={category}
+          loading={false}
         />
       </div>
     );
   }
 }
+
+const mapStateToProps = (state, { location }) => {
+  const p = new URLSearchParams(location.search);
+  const page = p.get('_page');
+  const category = p.get('category') || 'all';
+  return {
+    page,
+    category,
+    products: getProducts(state, category),
+    productsPerPage: 4,
+  };
+};
+
+ProductList = withRouter(
+  connect(
+    mapStateToProps,
+    actions
+  )(ProductList)
+);
+
+export default ProductList;
