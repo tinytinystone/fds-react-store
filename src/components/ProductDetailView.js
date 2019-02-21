@@ -3,14 +3,6 @@ import withLoading from '../hoc/withLoading';
 import s from './ProductDetailView.module.scss';
 
 class ProductDetailView extends Component {
-  static defaultProps = {
-    id: null,
-    title: '',
-    description: '',
-    mainImgUrl: '',
-    detailImgUrls: [],
-    options: [],
-  };
   constructor(props) {
     super(props);
     this.state = {
@@ -20,16 +12,11 @@ class ProductDetailView extends Component {
   }
   handleOptionChange = e => {
     const selectedOptionId = parseInt(e.target.value);
-    this.setState({
-      selectedOptionId,
-      quantity: 1,
-    });
+    this.props.onUpdateOptionChange(selectedOptionId);
   };
   handleQtyChange = e => {
     const quantity = parseInt(e.target.value);
-    this.setState({
-      quantity,
-    });
+    this.props.onUpdateQuantityChange(quantity);
   };
   render() {
     const {
@@ -40,9 +27,8 @@ class ProductDetailView extends Component {
       detailImgUrls,
       options,
     } = this.props;
-    const { selectedOptionId, quantity } = this.state;
-    const selectedOption = options.find(o => o.id === selectedOptionId);
-    const finalPrice = selectedOption && selectedOption.price * quantity;
+    // const selectedOption = options.find(o => o.id === selectedOptionId);
+    // const finalPrice = selectedOption && selectedOption.price * quantity;
     return (
       <React.Fragment>
         <ul className={s.info}>
@@ -67,7 +53,7 @@ class ProductDetailView extends Component {
           }}
         >
           <label>가격</label>
-          <p>{options[0].price} 원</p>
+          <p>{options && options[0].price} 원</p>
           <label>선택</label>
           <select
             name="options"
@@ -77,11 +63,12 @@ class ProductDetailView extends Component {
             <option disabled value="">
               옵션을 선택하세요
             </option>
-            {options.map(o => (
-              <option key={o.id} value={o.id}>
-                {o.title}
-              </option>
-            ))}
+            {options &&
+              options.map(o => (
+                <option key={o.id} value={o.id}>
+                  {o.title}
+                </option>
+              ))}
           </select>
           <label>수량</label>
           <input
@@ -91,12 +78,13 @@ class ProductDetailView extends Component {
             onChange={this.handleQtyChange}
           />
           <label>최종 가격</label>
-          <p>{finalPrice} 원</p>
+          {/* <p>{finalPrice} 원</p> */}
           <button>장바구니에 넣기</button>
         </form>
-        {detailImgUrls.map(url => (
-          <img src={url} alt={title} key={id} className={s.detailImg} />
-        ))}
+        {detailImgUrls &&
+          detailImgUrls.map(url => (
+            <img src={url} alt={title} key={id} className={s.detailImg} />
+          ))}
       </React.Fragment>
     );
   }

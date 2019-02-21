@@ -7,7 +7,7 @@ const createList = category => {
     }
     switch (action.type) {
       case 'RECEIVE_PRODUCTS':
-        return action.response.data.map(product => product.id);
+        return action.products.map(product => product.id);
       default:
         return state;
     }
@@ -18,7 +18,7 @@ const createList = category => {
     }
     switch (action.type) {
       case 'RECEIVE_PRODUCTS':
-        return parseInt(action.response.headers['x-total-count']);
+        return action.totalCount;
       default:
         return state;
     }

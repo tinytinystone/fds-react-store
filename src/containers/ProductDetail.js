@@ -1,61 +1,54 @@
 import React, { Component } from 'react';
 import ProductDetailView from '../components/ProductDetailView';
-import api from '../api';
 
-export default class ProductDetail extends Component {
-  static defaultProps = {
-    // 표시해주어야 하는 상품의 id
-    productId: null,
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
+import * as actions from '../actions';
+
+class ProductDetail extends Component {
+  componentDidMount() {
+    const { fetchItemDetail, productId } = this.props;
+    fetchItemDetail(productId);
+  }
+  handleUpdateQuantityChange = quantity => {
+    this.props.updateQuantityChange(quantity);
   };
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      id: null,
-      title: '',
-      description: '',
-      mainImgUrl: '',
-      detailImgUrls: [''],
-      options: [
-        {
-          id: 1,
-          productId: 1,
-          title: 'Medium',
-          price: 30000,
-        },
-      ],
-    };
-  }
-  async componentDidMount() {
-    const { data: product } = await api.get(
-      'products/' + this.props.productId,
-      {
-        params: {
-          _embed: 'options',
-        },
-      }
-    );
-    this.setState({
-      ...product,
-      loading: false,
-    });
-  }
+  handleUpdateoptionChange = option => {
+    this.props.updateOptionChange(option);
+  };
   handleCreateCartItem = async (optionId, quantity) => {
-    await api.post('cartItems', {
-      optionId,
-      quantity,
-      ordered: false,
-    });
-    alert('장바구니에 담겼습니다.');
+    const { createCartItem } = this.props;
+    createCartItem(parseInt(optionId), parseInt(quantity));
   };
   render() {
     return (
       <div>
         <ProductDetailView
           onCreateCartItem={this.handleCreateCartItem}
-          {...this.state}
+          {...this.props}
+          onUpdateQuantityChange={this.handleUpdateQuantityChange}
+          onUpdateOptionChange={this.handleUpdateOptionChange}
         />
       </div>
     );
   }
 }
+
+const mapStateToProps = (state, { match }) => {
+  const productId = match.params.productId;
+  const productDetailInfo = state.productDetail.productDetailInfo;
+  return {
+    productId,
+    ...productDetailInfo,
+  };
+};
+
+ProductDetail = withRouter(
+  connect(
+    mapStateToProps,
+    actions
+  )(ProductDetail)
+);
+
+export default ProductDetail;

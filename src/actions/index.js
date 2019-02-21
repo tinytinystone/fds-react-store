@@ -59,11 +59,12 @@ const requestProducts = (page, category) => ({
   category,
 });
 
-const receiveProducts = (page, category, response) => ({
+const receiveProducts = (page, category, products, totalCount) => ({
   type: 'RECEIVE_PRODUCTS',
   page,
   category,
-  response,
+  products,
+  totalCount,
 });
 
 export const fetchProducts = (
@@ -80,5 +81,57 @@ export const fetchProducts = (
     `/products/?${hasCategory}_embed=options&${hasPage}&_limit=${productsPerPage}`
   );
 
-  return dispatch(receiveProducts(page, category, response));
+  const products = response.data;
+  const totalCount = parseInt(response.headers['x-total-count']);
+
+  return dispatch(receiveProducts(page, category, products, totalCount));
+};
+
+// item detail 관련
+
+const requestItemDetail = productId => ({
+  type: 'REQUEST_ITEM_DETAIL',
+  productId,
+});
+
+const receiveItemDetail = product => ({
+  type: 'RECEIVE_ITEM_DETAIL',
+  product,
+});
+
+export const updateOptionChange = optionId => ({
+  type: 'UPDATE_OPTION_CHANGE',
+  optionId,
+});
+
+export const updateQuantityChange = quantity => ({
+  type: 'UPDATE_QUANTITY_CHANGE',
+  quantity,
+});
+
+export const updateCartInfo = () => ({
+  type: 'UPDATE_CART_INFO',
+});
+
+export const fetchItemDetail = productId => async dispatch => {
+  dispatch(requestItemDetail);
+
+  const response = await api.get('products/' + productId, {
+    params: {
+      _embed: 'options',
+    },
+  });
+  const product = response.data;
+
+  return dispatch(receiveItemDetail(product));
+};
+
+export const createCartItem = (optionId, quantity) => async dispatch => {
+  await api.post('cartItems', {
+    optionId,
+    quantity,
+    ordered: false,
+  });
+  alert('장바구니에 담겼습니다.');
+  return dispatch(updateCartInfo());
 };
