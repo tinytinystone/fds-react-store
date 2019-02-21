@@ -68,16 +68,16 @@ const receiveProducts = (page, category, response) => ({
 
 export const fetchProducts = (
   page,
-  category,
+  category = null,
   productsPerPage
 ) => async dispatch => {
   dispatch(requestProducts);
 
-  const hasCategory = category ? `category=${category}&` : '';
-  const hasPage = page ? `_page=${page}&_limit=${productsPerPage}` : '';
+  const hasCategory = category !== 'all' ? `category=${category}&` : '';
+  const hasPage = page ? `_page=${page}` : '';
 
   const response = await api.get(
-    `/products/?${hasCategory}_embed=options&${hasPage}`
+    `/products/?${hasCategory}_embed=options&${hasPage}&_limit=${productsPerPage}`
   );
 
   return dispatch(receiveProducts(page, category, response));

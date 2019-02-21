@@ -34,7 +34,7 @@ const byId = (state = {}, action) => {
 };
 
 const createList = category => {
-  return (state = [], action) => {
+  const ids = (state = [], action) => {
     if (action.category !== category) {
       return state;
     }
@@ -45,8 +45,22 @@ const createList = category => {
         return state;
     }
   };
+  const totalCount = (state = 0, action) => {
+    if (action.category !== category) {
+      return state;
+    }
+    switch (action.type) {
+      case 'RECEIVE_PRODUCTS':
+        return parseInt(action.response.headers['x-total-count']);
+      default:
+        return state;
+    }
+  };
+  return combineReducers({
+    ids,
+    totalCount,
+  });
 };
-
 const listByCategory = combineReducers({
   all: createList('all'),
   flower: createList('flower'),
@@ -73,9 +87,14 @@ export const getUsers = state => {
 };
 
 const getProduct = (state, id) => state[id];
-const getIds = state => state;
+const getIds = state => state.ids;
+const getTotalCount = state => state.totalCount;
 
 export const getProducts = (state, category) => {
   const ids = getIds(state.products.listByCategory[category]);
   return ids.map(id => getProduct(state.products.byId, id));
+};
+
+export const getTotalCounts = (state, category) => {
+  getTotalCount(state.products.listByCategory[category]);
 };
