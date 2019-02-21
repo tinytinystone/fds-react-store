@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+
 import ProductListView from '../components/ProductListView';
+
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getProducts, getTotalCounts } from '../reducers';
+
+import { getProducts, getTotalCount } from '../reducers';
 import * as actions from '../actions';
 
 class ProductList extends Component {
@@ -19,32 +22,29 @@ class ProductList extends Component {
     }
     return pageNumbers;
   }
-
-  render() {
-    const {
-      products,
-      page,
-      productsPerPage,
-      category,
-      totalCount,
-    } = this.props;
-    const productsList = products.map(p => ({
+  mapProductList(products) {
+    return products.map(p => ({
       title: p.title,
       id: p.id,
       imgUrl: p.mainImgUrl,
       price: p.options[0].price,
     }));
+  }
+
+  render() {
+    const { products, page, category, ...rest } = this.props;
+
+    const productsList = this.mapProductList(products);
     const pageNumbers = this.countPageNumber();
+
     return (
       <div>
         <ProductListView
-          products={productsList}
+          productList={productsList}
           currentPage={page}
-          productsPerPage={productsPerPage}
-          totalProducts={totalCount}
           currentCategory={category}
-          loading={false}
           pageNumbers={pageNumbers}
+          {...rest}
         />
       </div>
     );
@@ -60,7 +60,7 @@ const mapStateToProps = (state, { location }) => {
     category,
     products: getProducts(state, category),
     productsPerPage: 4,
-    totalCount: state.products.listByCategory[category].totalCount,
+    totalCount: getTotalCount(state, category),
   };
 };
 

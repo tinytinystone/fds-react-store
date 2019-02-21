@@ -1,0 +1,17 @@
+.listItem {
+  display: flex;
+  flex-direction: column;
+  width: 170px;
+}
+.listItem * {
+  display: block;
+  padding-top: 1rem;
+}
+.listItem img {
+  width: 170px;
+  margin: 0 auto;
+}
+.price {
+  color: #666;
+  font-weight: 900;
+}
