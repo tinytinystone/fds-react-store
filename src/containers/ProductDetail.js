@@ -7,28 +7,53 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 
 class ProductDetail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedOptionId: '',
+      quantity: 1,
+    };
+  }
   componentDidMount() {
     const { fetchItemDetail, productId } = this.props;
     fetchItemDetail(productId);
   }
-  handleUpdateQuantityChange = quantity => {
-    this.props.updateQuantityChange(quantity);
+  handleOptionChange = e => {
+    const selectedOptionId = parseInt(e.target.value);
+    this.setState({
+      selectedOptionId,
+      quantity: 1,
+    });
   };
-  handleUpdateoptionChange = option => {
-    this.props.updateOptionChange(option);
+  handleQtyChange = e => {
+    const quantity = parseInt(e.target.value);
+    this.setState({
+      quantity,
+    });
   };
   handleCreateCartItem = async (optionId, quantity) => {
     const { createCartItem } = this.props;
     createCartItem(parseInt(optionId), parseInt(quantity));
   };
+  countFinalPrice = (options, selectedOptionId, quantity) => {
+    const selectedOption = options.find(o => o.id === selectedOptionId);
+    return selectedOption && selectedOption.price * quantity;
+  };
   render() {
+    const { options } = this.props;
+    const { selectedOptionId, quantity } = this.state;
+    const finalPrice =
+      options && this.countFinalPrice(options, selectedOptionId, quantity);
     return (
       <div>
         <ProductDetailView
           onCreateCartItem={this.handleCreateCartItem}
+          onQtyChange={this.handleQtyChange}
+          onOptionChange={this.handleOptionChange}
+          finalPrice={finalPrice}
+          selectedOptionId={selectedOptionId}
+          quantity={quantity}
           {...this.props}
-          onUpdateQuantityChange={this.handleUpdateQuantityChange}
-          onUpdateOptionChange={this.handleUpdateOptionChange}
         />
       </div>
     );

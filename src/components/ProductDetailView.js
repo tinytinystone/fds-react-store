@@ -3,21 +3,6 @@ import withLoading from '../hoc/withLoading';
 import s from './ProductDetailView.module.scss';
 
 class ProductDetailView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedOptionId: '',
-      quantity: 1,
-    };
-  }
-  handleOptionChange = e => {
-    const selectedOptionId = parseInt(e.target.value);
-    this.props.onUpdateOptionChange(selectedOptionId);
-  };
-  handleQtyChange = e => {
-    const quantity = parseInt(e.target.value);
-    this.props.onUpdateQuantityChange(quantity);
-  };
   render() {
     const {
       id,
@@ -26,9 +11,13 @@ class ProductDetailView extends Component {
       mainImgUrl,
       detailImgUrls,
       options,
+      onQtyChange,
+      onOptionChange,
+      finalPrice,
+      selectedOptionId,
+      quantity,
     } = this.props;
-    // const selectedOption = options.find(o => o.id === selectedOptionId);
-    // const finalPrice = selectedOption && selectedOption.price * quantity;
+
     return (
       <React.Fragment>
         <ul className={s.info}>
@@ -42,7 +31,6 @@ class ProductDetailView extends Component {
           className={s.cartForm}
           onSubmit={e => {
             e.preventDefault();
-            const { selectedOptionId, quantity } = this.state;
             if (selectedOptionId === '') {
               alert('choose an option.');
             } else if (quantity < 1) {
@@ -57,8 +45,8 @@ class ProductDetailView extends Component {
           <label>선택</label>
           <select
             name="options"
-            value={this.state.selectedOptionId}
-            onChange={this.handleOptionChange}
+            value={selectedOptionId}
+            onChange={onOptionChange}
           >
             <option disabled value="">
               옵션을 선택하세요
@@ -74,11 +62,11 @@ class ProductDetailView extends Component {
           <input
             type="number"
             name="quantity"
-            value={this.state.quantity}
-            onChange={this.handleQtyChange}
+            value={quantity}
+            onChange={onQtyChange}
           />
           <label>최종 가격</label>
-          {/* <p>{finalPrice} 원</p> */}
+          <p>{finalPrice} 원</p>
           <button>장바구니에 넣기</button>
         </form>
         {detailImgUrls &&

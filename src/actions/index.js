@@ -99,16 +99,6 @@ const receiveItemDetail = product => ({
   product,
 });
 
-export const updateOptionChange = optionId => ({
-  type: 'UPDATE_OPTION_CHANGE',
-  optionId,
-});
-
-export const updateQuantityChange = quantity => ({
-  type: 'UPDATE_QUANTITY_CHANGE',
-  quantity,
-});
-
 export const updateCartInfo = () => ({
   type: 'UPDATE_CART_INFO',
 });
