@@ -15,9 +15,9 @@ function LoginForm({ login, history }) {
   return <LoginFormView onLogin={onLogin} />;
 }
 
-LoginForm = connect(
-  null,
-  { login }
-)(LoginForm);
-
-export default withRouter(LoginForm);
+export default withRouter(
+  connect(
+    null,
+    { login }
+  )(LoginForm)
+);

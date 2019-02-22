@@ -15,9 +15,9 @@ function RegisterForm({ register, history }) {
   return <RegisterFormView onRegister={onRegister} history={history} />;
 }
 
-RegisterForm = connect(
-  null,
-  { register }
-)(RegisterForm);
-
-export default withRouter(RegisterForm);
+export default withRouter(
+  connect(
+    null,
+    { register }
+  )(RegisterForm)
+);

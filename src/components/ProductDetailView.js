@@ -17,7 +17,6 @@ class ProductDetailView extends Component {
       selectedOptionId,
       quantity,
     } = this.props;
-
     return (
       <React.Fragment>
         <ul className={s.info}>
