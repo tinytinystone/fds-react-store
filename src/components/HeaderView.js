@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 import s from './HeaderView.module.scss';
 
-const HeaderView = ({ users, logout, history }) => {
+const HeaderView = ({ username, logout, history }) => {
   return (
     <React.Fragment>
       <ul className={s.member}>
-        {users.username ? (
+        {username ? (
           <React.Fragment>
             <li
               onClick={() => {
