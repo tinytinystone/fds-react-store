@@ -32,6 +32,16 @@ export const receiveItemDetail = product => ({
   product,
 });
 
-export const updateCartInfo = () => ({
-  type: 'UPDATE_CART_INFO',
+export const updateCartItem = () => ({
+  type: 'UPDATE_CART_ITEM',
+});
+
+export const requestCartItems = () => ({
+  type: 'REQUEST_CART_ITEMS',
+});
+
+export const receiveCartItems = (cartItems, products) => ({
+  type: 'RECEIVE_CART_ITEMS',
+  cartItems,
+  products,
 });

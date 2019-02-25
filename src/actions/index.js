@@ -2,7 +2,7 @@ import { fetchItemDetail } from './productDetail';
 import { fetchProducts } from './products';
 import { login, logout, register, refreshUsers } from './users';
 import { createCartItem, refreshCartItems } from './cartList';
-import {} from './actionCreator';
+import { updateUserInfo } from './actionCreator';
 
 export {
   login,
@@ -13,4 +13,5 @@ export {
   refreshCartItems,
   fetchItemDetail,
   fetchProducts,
+  updateUserInfo,
 };

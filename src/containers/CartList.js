@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import CartListView from '../components/CartListView';
 import api from '../api';
+import { refreshCartItems } from '../actions';
+import { getCartList } from '../reducers';
+import { connect } from 'react-redux';
 
-export default class CartList extends Component {
+class CartList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
       carts: [
         // {
         //   id: 1,
@@ -20,28 +22,31 @@ export default class CartList extends Component {
     };
   }
   componentDidMount() {
-    this.refreshCartItems();
+    return this.props.refreshCartItems();
   }
-  refreshCartItems = async () => {
-    const { data: cartItems } = await api.get('cartItems/', {
-      params: {
-        ordered: false,
-        _expand: 'option',
-      },
-    });
-    const p = new URLSearchParams();
-    cartItems.forEach(element => {
-      p.append('id', element.option.productId);
-    });
-    const { data: products } = await api.get('products', {
-      params: p,
-    });
-    this.setState({
-      carts: cartItems,
-      products,
-      loading: false,
-    });
-  };
+  refreshCartItems() {
+    return this.props.refreshCartItems();
+  }
+  // refreshCartItems = async () => {
+  //   const { data: cartItems } = await api.get('cartItems/', {
+  //     params: {
+  //       ordered: false,
+  //       _expand: 'option',
+  //     },
+  //   });
+  //   const p = new URLSearchParams();
+  //   cartItems.forEach(element => {
+  //     p.append('id', element.option.productId);
+  //   });
+  //   const { data: products } = await api.get('products', {
+  //     params: p,
+  //   });
+  //   this.setState({
+  //     carts: cartItems,
+  //     products,
+  //     loading: false,
+  //   });
+  // };
   orderCartItems = async (cartItemId, quantity, orderId) => {
     await api.patch('/cartItems/' + cartItemId, {
       ordered: true,
@@ -50,15 +55,11 @@ export default class CartList extends Component {
     });
   };
   deleteItem = async cartItemId => {
-    this.setState({
-      loading: true,
-    });
     await api.delete('cartItems/' + cartItemId);
     alert('해당 항목이 삭제 되었습니다.');
     this.refreshCartItems();
   };
   handleOrderClick = async arr => {
-    this.setState({ loading: true });
     const {
       data: { id: orderId },
     } = await api.post('/orders', {
@@ -79,14 +80,15 @@ export default class CartList extends Component {
     this.setState({
       carts: [],
       products: [],
-      loading: false,
     });
   };
   render() {
-    const { carts, products, loading } = this.state;
+    const { carts, products } = this.state;
+    const { productsInCart } = this.props;
+    console.log(productsInCart);
     return (
       <CartListView
-        loading={loading}
+        productsInCart={productsInCart}
         carts={carts}
         products={products}
         handleOrderClick={this.handleOrderClick}
@@ -95,3 +97,14 @@ export default class CartList extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  productsInCart: getCartList(state),
+});
+
+CartList = connect(
+  mapStateToProps,
+  { refreshCartItems: refreshCartItems }
+)(CartList);
+
+export default CartList;

@@ -5,31 +5,14 @@ import withLoading from '../hoc/withLoading';
 class CartListView extends Component {
   constructor(props) {
     super(props);
-
-    // !! props로부터 state를 계산해내고 싶은 경우
-    // 생성자에서 해당 작업을 해주면 된다.
-    // 다만, props가 단 한번만 내려올 때만 이 방식이 가능하다.
-
-    const { carts, products } = props;
-    const productsInCarts = carts.map(cart => {
-      const { quantity, option } = cart;
-      const { mainImgUrl, title } = products.find(
-        product => cart.option.productId === product.id
-      );
-      return {
-        cartId: cart.id,
-        title,
-        price: option.price,
-        mainImgUrl,
-        quantity,
-        optionTitle: option.title,
-        checked: true,
-      };
-    });
-
     this.state = {
-      productsInCarts,
+      productsInCarts: [],
     };
+  }
+  componentDidMount() {
+    this.setState({
+      productsInCarts: this.props.productsInCart,
+    });
   }
   changeQuantity = (cartId, quantity) => {
     const { productsInCarts } = this.state;
@@ -108,10 +91,10 @@ class CartListView extends Component {
     );
   }
   render() {
-    const { productsInCarts } = this.state;
+    const { productsInCart } = this.props;
     return (
       <section>
-        {productsInCarts.map(p => this.renderItem(p))}
+        {productsInCart.map(p => this.renderItem(p))}
         <button onClick={this.goToOrder}>주문하기</button>
       </section>
     );

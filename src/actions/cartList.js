@@ -1,5 +1,9 @@
 import api from '../api';
-import { updateCartInfo } from './actionCreator';
+import {
+  updateCartItem,
+  requestCartItems,
+  receiveCartItems,
+} from './actionCreator';
 
 export const createCartItem = (optionId, quantity) => async dispatch => {
   await api.post('cartItems', {
@@ -8,10 +12,11 @@ export const createCartItem = (optionId, quantity) => async dispatch => {
     ordered: false,
   });
   alert('장바구니에 담겼습니다.');
-  return dispatch(updateCartInfo());
+  return dispatch(updateCartItem());
 };
 
 export const refreshCartItems = () => async dispatch => {
+  dispatch(requestCartItems);
   const { data: cartItems } = await api.get('cartItems/', {
     params: {
       ordered: false,
@@ -26,5 +31,5 @@ export const refreshCartItems = () => async dispatch => {
     params: p,
   });
 
-  return dispatch(updateCartInfo(cartItems));
+  return dispatch(receiveCartItems(cartItems, products));
 };
