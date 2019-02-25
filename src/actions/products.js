@@ -1,24 +1,22 @@
-const requestProducts = (page, category) => ({
-  type: 'REQUEST_PRODUCTS',
-  page,
-  category,
-});
+import api from '../api';
+import { requestProducts, receiveProducts } from './actionCreator';
 
-const receiveProducts = (page, category, response) => ({
-  type: 'RECEIVE_PRODUCTS',
+export const fetchProducts = (
   page,
-  category,
-  response,
-});
-
-const fetchProducts = (page, category) => async dispatch => {
+  category = null,
+  productsPerPage
+) => async dispatch => {
   dispatch(requestProducts);
 
+  const hasCategory = category !== 'all' ? `category=${category}&` : '';
+  const hasPage = page ? `_page=${page}` : '';
+
   const response = await api.get(
-    `/products/?category=${category}&_embed=options&_page=${page}&_limit=${
-      this.state.productsPerPage
-    }`
+    `/products/?${hasCategory}_embed=options&${hasPage}&_limit=${productsPerPage}`
   );
 
-  return dispatch(receiveProducts(page, category, response.data));
+  const products = response.data;
+  const totalCount = parseInt(response.headers['x-total-count']);
+
+  return dispatch(receiveProducts(page, category, products, totalCount));
 };

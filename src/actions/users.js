@@ -1,12 +1,5 @@
-const updateUserInfo = (username, id) => ({
-  type: 'UPDATE_USER_INFO',
-  username,
-  id,
-});
-
-const emptyUserInfo = () => ({
-  type: 'EMPTY_USER_INFO',
-});
+import api from '../api';
+import { updateUserInfo, emptyUserInfo } from './actionCreator';
 
 export const refreshUsers = () => async dispatch => {
   const response = await api.get('/me');
