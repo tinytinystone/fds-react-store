@@ -14,8 +14,8 @@ class Header extends Component {
     }
   }
   render() {
-    const { username, ...rest } = this.props;
-    return <HeaderView key={username} username={username} {...rest} />;
+    const { users, ...rest } = this.props;
+    return <HeaderView username={users.username} {...rest} />;
   }
 }
 
