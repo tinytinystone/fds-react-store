@@ -1,4 +1,4 @@
-const byId = (state = {}, action) => {
+const byProductId = (state = {}, action) => {
   switch (action.type) {
     case 'RECEIVE_PRODUCTS':
       const nextState = { ...state };
@@ -11,6 +11,6 @@ const byId = (state = {}, action) => {
   }
 };
 
-export default byId;
+export default byProductId;
 
 export const getProduct = (state, id) => state[id];

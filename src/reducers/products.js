@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import byId, * as fromById from './byId';
+import byProductId, * as fromByProductId from './byProductId';
 import createList, * as fromCreateList from './createList';
 
 const listByCategory = combineReducers({
@@ -12,7 +12,7 @@ const listByCategory = combineReducers({
 });
 
 const products = combineReducers({
-  byId,
+  byProductId,
   listByCategory,
 });
 
@@ -20,7 +20,9 @@ export default products;
 
 export const getProducts = (state, category) => {
   const ids = fromCreateList.getIds(state.products.listByCategory[category]);
-  return ids.map(id => fromById.getProduct(state.products.byId, id));
+  return ids.map(id =>
+    fromByProductId.getProduct(state.products.byProductId, id)
+  );
 };
 
 export const getTotalCount = (state, category) => {
