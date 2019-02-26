@@ -1,36 +1,16 @@
-// const productDetailInCartItem = (state = {}, action) => {
-//   switch (action.type) {
-//     case 'RECEIVE_CART_ITEMS':
-//     default:
-//       return state;
-//   }
-// };
-
-const cartList = (state = [], action) => {
+const byCartId = (state = {}, action) => {
   switch (action.type) {
     case 'RECEIVE_CART_ITEMS':
-      return action.cartItems.map(cartItem => {
-        const { id, quantity, option } = cartItem;
-        const { mainImgUrl, title } = action.products.find(
-          product => cartItem.option.productId === product.id
-        );
-        return {
-          ...state,
-          cartId: id,
-          title,
-          price: option.price,
-          mainImgUrl,
-          quantity,
-          optionTitle: option.title,
-          productId: option.productId,
-          checked: true,
-        };
+      const nextState = { ...state };
+      action.cartItems.forEach(cartItem => {
+        nextState[cartItem.id] = cartItem;
       });
+      return nextState;
     default:
       return state;
   }
 };
 
-export default cartList;
+export default byCartId;
 
-export const getCartList = state => state;
+export const getCartItems = (state, id) => state[id];

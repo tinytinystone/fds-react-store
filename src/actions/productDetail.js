@@ -2,7 +2,7 @@ import api from '../api';
 import { requestItemDetail, receiveItemDetail } from './actionCreator';
 
 export const fetchItemDetail = productId => async dispatch => {
-  dispatch(requestItemDetail);
+  dispatch(requestItemDetail());
 
   const response = await api.get('products/' + productId, {
     params: {

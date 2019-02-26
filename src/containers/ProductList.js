@@ -11,7 +11,7 @@ import * as actions from '../actions';
 class ProductList extends Component {
   componentDidMount() {
     const { page, category, productsPerPage, fetchProducts } = this.props;
-    fetchProducts(page, category, productsPerPage);
+    fetchProducts(category, page, productsPerPage);
   }
 
   countPageNumber() {
@@ -27,7 +27,7 @@ class ProductList extends Component {
       title: p.title,
       id: p.id,
       imgUrl: p.mainImgUrl,
-      price: p.options[0].price,
+      price: p.options && p.options[0].price,
     }));
   }
 

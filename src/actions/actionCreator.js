@@ -14,12 +14,12 @@ export const requestProducts = (page, category) => ({
   category,
 });
 
-export const receiveProducts = (page, category, products, totalCount) => ({
+export const receiveProducts = (products, category, totalCount, page) => ({
   type: 'RECEIVE_PRODUCTS',
-  page,
-  category,
   products,
+  category,
   totalCount,
+  page,
 });
 
 export const requestItemDetail = productId => ({
@@ -40,8 +40,11 @@ export const requestCartItems = () => ({
   type: 'REQUEST_CART_ITEMS',
 });
 
-export const receiveCartItems = (cartItems, products) => ({
+export const receiveCartItems = cartItems => ({
   type: 'RECEIVE_CART_ITEMS',
   cartItems,
-  products,
+});
+
+export const updateOrder = () => ({
+  type: 'UPDATE_ORDER',
 });

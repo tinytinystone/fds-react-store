@@ -6,14 +6,14 @@ class CartListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productsInCarts: [],
+      productsInCarts: props.productsInCart,
     };
   }
-  componentDidMount() {
-    this.setState({
-      productsInCarts: this.props.productsInCart,
-    });
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     productsInCarts: this.,
+  //   });
+  // }
   changeQuantity = (cartId, quantity) => {
     const { productsInCarts } = this.state;
     const newProductsInCarts = productsInCarts.map(p => {
@@ -48,7 +48,7 @@ class CartListView extends Component {
         quantity: p.quantity,
       });
     }
-    this.props.handleOrderClick(newArr);
+    this.props.handleOrderClick(newArr, this.props.cartItems);
   };
   renderItem(productInCart) {
     const {
@@ -94,7 +94,7 @@ class CartListView extends Component {
     const { productsInCart } = this.props;
     return (
       <section>
-        {productsInCart.map(p => this.renderItem(p))}
+        {productsInCart && productsInCart.map(p => this.renderItem(p))}
         <button onClick={this.goToOrder}>주문하기</button>
       </section>
     );

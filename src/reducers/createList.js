@@ -31,5 +31,5 @@ const createList = category => {
 
 export default createList;
 
-export const getIds = state => state.ids;
+export const getProductIds = state => state.ids;
 export const getTotalCount = state => state.totalCount;
