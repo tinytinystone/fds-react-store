@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import s from './CartListView.module.scss';
 import withLoading from '../hoc/withLoading';
+import CartItem from './CartItem';
 
 class CartListView extends Component {
   constructor(props) {
@@ -9,29 +10,11 @@ class CartListView extends Component {
       productsInCarts: props.productsInCart,
     };
   }
-  // componentDidMount() {
-  //   this.setState({
-  //     productsInCarts: this.,
-  //   });
-  // }
   changeQuantity = (cartId, quantity) => {
     const { productsInCarts } = this.state;
     const newProductsInCarts = productsInCarts.map(p => {
       if (p.cartId === cartId) {
         p.quantity = quantity;
-      }
-      return p;
-    });
-    this.setState({ productsInCarts: newProductsInCarts });
-  };
-  handleCheck = e => {
-    // e.preventDefault(); // 흑흑 슬퍼요
-    // immer를 써보는 것으로
-    const { productsInCarts } = this.state;
-    const cartId = parseInt(e.target.value);
-    const newProductsInCarts = productsInCarts.map(p => {
-      if (p.cartId === cartId) {
-        p.checked = e.target.checked;
       }
       return p;
     });
@@ -50,51 +33,19 @@ class CartListView extends Component {
     }
     this.props.handleOrderClick(newArr, this.props.cartItems);
   };
-  renderItem(productInCart) {
-    const {
-      cartId,
-      title,
-      price,
-      mainImgUrl,
-      quantity,
-      optionTitle,
-      checked,
-    } = productInCart;
-    return (
-      <article key={cartId} className={s.cartItem}>
-        <input
-          type="checkbox"
-          checked={checked}
-          value={cartId}
-          onChange={this.handleCheck}
-        />
-        <img src={mainImgUrl} alt={title} />
-        <h3>{title}</h3>
-        <span>{price * quantity}</span>
-        <span>{optionTitle}</span>
-        <input
-          type="number"
-          name="quantity"
-          value={quantity}
-          onChange={e =>
-            this.changeQuantity(parseInt(cartId), parseInt(e.target.value))
-          }
-        />
-        <button
-          onClick={e => {
-            this.props.deleteItem(cartId);
-          }}
-        >
-          삭제
-        </button>
-      </article>
-    );
-  }
   render() {
-    const { productsInCart } = this.props;
+    const { productsInCart, deleteItem, findSelectedItems } = this.props;
     return (
       <section>
-        {productsInCart && productsInCart.map(p => this.renderItem(p))}
+        {productsInCart &&
+          productsInCart.map(p => (
+            <CartItem
+              key={p.cartId}
+              cartItem={p}
+              deleteItem={deleteItem}
+              findSelectedItems={findSelectedItems}
+            />
+          ))}
         <button onClick={this.goToOrder}>주문하기</button>
       </section>
     );

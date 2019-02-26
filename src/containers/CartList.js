@@ -6,9 +6,34 @@ import { getCartItems, getProducts } from '../reducers';
 import { connect } from 'react-redux';
 
 class CartList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedItems: [],
+    };
+  }
   componentDidMount() {
     this.props.refreshCartItems();
   }
+  findSelectedItems = e => {
+    if (e.target.checked) {
+      const cartItemId = parseInt(e.target.value);
+      const selectedItems = [...this.state.selectedItems, cartItemId];
+      this.setState({
+        selectedItems,
+      });
+    }
+  };
+  handleQtyChange = e => {
+    const quantity = parseInt(e.target.value);
+    this.setState({
+      quantity,
+    });
+  };
+  handleCreateCartItem = async (optionId, quantity) => {
+    const { createCartItem } = this.props;
+    createCartItem(parseInt(optionId), parseInt(quantity));
+  };
   render() {
     const {
       cartItems,
@@ -28,6 +53,7 @@ class CartList extends Component {
         carts={cartItems}
         handleOrderClick={orderCartItems}
         deleteItem={deleteCartItem}
+        findSelectedItems={this.findSelectedItems}
         {...rest}
       />
     );

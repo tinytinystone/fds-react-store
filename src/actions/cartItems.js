@@ -57,14 +57,14 @@ const requestCartItemOrdered = (
   console.log(response);
   dispatch(updateOrder());
 };
-export const orderCartItems = (checkedItems, cartItems) => async dispatch => {
+export const orderCartItems = (selectedItems, cartItems) => async dispatch => {
   const {
     data: { id: orderId },
   } = await api.post('/orders', {
     orderTime: Date.now(),
   });
-  checkedItems.forEach(checkedItem => {
-    const { id, quantity } = checkedItem;
+  selectedItems.forEach(selectedItem => {
+    const { id, quantity } = selectedItem;
     cartItems.forEach(cartItem => {
       if (cartItem.id === parseInt(id)) {
         dispatch(
