@@ -21,6 +21,7 @@ const listByCategory = combineReducers({
   hanging: createList('hanging'),
   orchid: createList('orchid'),
   cartList: createList('cartList'),
+  currentProductDetail: createList('currentProductDetail'),
 });
 
 const products = combineReducers({
