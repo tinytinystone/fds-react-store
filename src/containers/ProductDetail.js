@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import * as actions from '../actions';
+import { getProducts } from '../reducers';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -15,8 +16,8 @@ class ProductDetail extends Component {
     };
   }
   componentDidMount() {
-    const { fetchItemDetail, productId } = this.props;
-    fetchItemDetail(productId);
+    const { fetchItemDetail, fetchProducts, productId } = this.props;
+    fetchProducts('all', null, null, productId);
   }
   handleOptionChange = e => {
     const selectedOptionId = parseInt(e.target.value);
@@ -60,9 +61,17 @@ class ProductDetail extends Component {
   }
 }
 
+const getProductDetailInfo = (state, productId) => {
+  if (state.products.byProductId[productId]) {
+    return state.products.byProductId[productId];
+  } else {
+    return state.productDetail.productDetailInfo;
+  }
+};
+
 const mapStateToProps = (state, { match }) => {
   const productId = match.params.productId;
-  const productDetailInfo = state.productDetail.productDetailInfo;
+  const productDetailInfo = getProductDetailInfo(state, productId);
   return {
     productId,
     ...productDetailInfo,
