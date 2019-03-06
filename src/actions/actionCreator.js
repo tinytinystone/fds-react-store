@@ -8,10 +8,20 @@ export const emptyUserInfo = () => ({
   type: 'EMPTY_USER_INFO',
 });
 
-export const requestProducts = (page, category) => ({
+export const fetchProductsRequest = () => ({
+  type: 'FETCH_PRODUCTS_REQUEST',
+});
+
+export const requestProducts = () => ({
   type: 'REQUEST_PRODUCTS',
-  page,
+});
+
+export const fetchProductsSuccess = (response, category, totalCount, page) => ({
+  type: 'FETCH_PRODUCTS_SUCCESS',
+  response,
   category,
+  totalCount,
+  page,
 });
 
 export const receiveProducts = (products, category, totalCount, page) => ({

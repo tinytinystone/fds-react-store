@@ -1,34 +1,64 @@
 import api from '../api';
-import { requestProducts, receiveProducts } from './actionCreator';
+import { fetchProductsRequest, fetchProductsSuccess } from './actionCreator';
+import { schema, normalize } from 'normalizr';
+import { getIsFetching } from '../reducers/createList';
+
+export const product = new schema.Entity('products');
+export const arrayOfProducts = [product];
 
 export const fetchProducts = (
   category,
   page = null,
-  productsPerPage = null
-) => async dispatch => {
-  dispatch(requestProducts());
+  productsPerPage = null,
+  productId = null
+) => async (dispatch, getState) => {
+  if (getIsFetching(getState(), category)) {
+    return Promise.resolve();
+  }
+  try {
+    dispatch(fetchProductsRequest());
+    let response;
 
-  const hasCategory = category !== 'all' ? `category=${category}&` : '';
-  const hasPage = page ? `_page=${page}` : '';
-  const hasProductsPerPage = productsPerPage
-    ? `&_limit=${productsPerPage}`
-    : '';
+    if (productId) {
+      response = await api.get(`/products/${productId}?_embed=options`);
+      console.log(response);
+    } else {
+      const hasCategory = category !== 'all' ? `category=${category}&` : '';
+      const hasPage = page ? `_page=${page}` : '';
+      const hasProductsPerPage = productsPerPage
+        ? `&_limit=${productsPerPage}`
+        : '';
 
-  const response = await api.get(
-    `/products/?${hasCategory}_embed=options&${hasPage}${hasProductsPerPage}`
-  );
+      response = await api.get(
+        `/products/?${hasCategory}_embed=options&${hasPage}${hasProductsPerPage}`
+      );
+    }
 
-  const products = response.data;
-  const totalCount =
-    productsPerPage && parseInt(response.headers['x-total-count']);
+    const products = Array.isArray(response.data)
+      ? response.data
+      : [response.data];
+    const totalCount =
+      productsPerPage && parseInt(response.headers['x-total-count']);
 
-  return dispatch(receiveProducts(products, category, totalCount, page));
+    return dispatch(
+      fetchProductsSuccess(
+        normalize(products, arrayOfProducts),
+        category,
+        totalCount,
+        page
+      )
+    );
+  } catch (error) {
+    dispatch({
+      type: 'FETCH_PRODUCTS_FAILTURE',
+    });
+  }
 };
 
 export const fetchProductsForCart = params => async dispatch => {
-  dispatch(requestProducts());
+  dispatch(fetchProductsRequest());
   const { data: products } = await api.get('products', {
     params,
   });
-  dispatch(receiveProducts(products, 'cartList', products.length));
+  dispatch(fetchProductsSuccess(products, 'cartList', products.length));
 };
