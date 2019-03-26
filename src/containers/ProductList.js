@@ -5,7 +5,7 @@ import ProductListView from '../components/ProductListView';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import { getProducts, getTotalCount } from '../reducers';
+import { getProducts, getTotalCount, getIsFetching } from '../reducers';
 import * as actions from '../actions';
 
 class ProductList extends Component {
@@ -32,7 +32,7 @@ class ProductList extends Component {
   }
 
   render() {
-    const { products, page, category, ...rest } = this.props;
+    const { products, page, category, isFetching, ...rest } = this.props;
 
     const productsList = this.mapProductList(products);
     const pageNumbers = this.countPageNumber();
@@ -44,6 +44,7 @@ class ProductList extends Component {
           currentPage={page}
           currentCategory={category}
           pageNumbers={pageNumbers}
+          isFetching={isFetching}
           {...rest}
         />
       </div>
@@ -55,12 +56,14 @@ const mapStateToProps = (state, { location }) => {
   const p = new URLSearchParams(location.search);
   const page = p.get('_page');
   const category = p.get('category') || 'all';
+
   return {
     page,
     category,
     products: getProducts(state, category),
     productsPerPage: 4,
     totalCount: getTotalCount(state, category),
+    isFetching: getIsFetching(state, category),
   };
 };
 

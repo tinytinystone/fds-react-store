@@ -62,11 +62,7 @@ class ProductDetail extends Component {
 }
 
 const getProductDetailInfo = (state, productId) => {
-  if (state.products.byProductId[productId]) {
-    return state.products.byProductId[productId];
-  } else {
-    return state.productDetail.productDetailInfo;
-  }
+  return state.products.byProductId[productId];
 };
 
 const mapStateToProps = (state, { match }) => {
