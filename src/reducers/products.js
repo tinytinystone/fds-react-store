@@ -1,17 +1,7 @@
 import { combineReducers } from 'redux';
 import byProductId, * as fromByProductId from './byProductId';
 import createList, * as fromCreateList from './createList';
-
-const isFetching = (state = false, action) => {
-  switch (action.type) {
-    case 'REQUEST_PRODUCTS':
-      return true;
-    case 'RECEIVE_PRODUCTS':
-      return false;
-    default:
-      return state;
-  }
-};
+import * as fromCartItems from './cartItems';
 
 const listByCategory = combineReducers({
   all: createList('all'),
@@ -25,7 +15,6 @@ const listByCategory = combineReducers({
 });
 
 const products = combineReducers({
-  isFetching,
   byProductId,
   listByCategory,
 });
@@ -43,4 +32,15 @@ export const getProducts = (state, category) => {
 
 export const getTotalCount = (state, category) => {
   return fromCreateList.getTotalCount(state.products.listByCategory[category]);
+};
+
+export const getIsFetching = (state, category) => {
+  return fromCreateList.getIsFetching(state.products.listByCategory[category]);
+};
+
+export const getProductsForCartItems = state => {
+  const cartItems = fromCartItems.getCartItems(state);
+  return cartItems.map(
+    cartItem => state.products.byProductId[cartItem.option.productId]
+  );
 };

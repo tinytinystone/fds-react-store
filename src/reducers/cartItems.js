@@ -3,8 +3,8 @@ import { combineReducers } from 'redux';
 
 const ids = (state = [], action) => {
   switch (action.type) {
-    case 'RECEIVE_CART_ITEMS':
-      return action.cartItems.map(cart => cart.id);
+    case 'FETCH_CART_ITEMS_SUCCESS':
+      return action.response.result;
     default:
       return state;
   }
@@ -12,33 +12,44 @@ const ids = (state = [], action) => {
 
 const isFetching = (state = false, action) => {
   switch (action.type) {
-    case 'REQUEST_CART_ITEMS':
+    case 'FETCH_CART_ITEMS_REQUEST':
       return true;
-    case 'RECEIVE_CART_ITEMS':
+    case 'FETCH_CART_ITEMS_SUCCESS':
+    case 'FETCH_CART_TIEMS_FAILURE':
       return false;
     default:
       return state;
   }
 };
 
-const cartList = combineReducers({
+const errorMessage = (state = null, action) => {
+  switch (action.type) {
+    case 'FETCH_CART_ITEMS_FAILURE':
+      return action.message;
+    case 'FETCH_CART_ITEMS_REQUEST':
+    case 'FETCH_CART_ITEMS_SUCCESS':
+      return null;
+    default:
+      return state;
+  }
+};
+
+const listByCartItems = combineReducers({
   ids,
   isFetching,
+  errorMessage,
 });
 
 const cartItems = combineReducers({
   byCartId,
-  cartList,
+  listByCartItems,
 });
 
 export default cartItems;
 
-export const getIsFetching = state => state.isFetching;
-
 export const getCartItems = state => {
-  const ids = state.cartItems.cartList.ids;
-  const result = ids.map(id =>
-    fromByCartId.getCartItems(state.cartItems.byCartId, id)
-  );
-  return result;
+  const ids = state.cartItems.listByCartItems.ids;
+  return ids.map(id => fromByCartId.getCartItems(state.cartItems.byCartId, id));
 };
+export const getIsFetching = state => state.cartItems.isFetching;
+export const getErrorMessage = state => state.cartItems.errorMessage;

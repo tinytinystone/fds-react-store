@@ -1,14 +1,11 @@
 const byCartId = (state = {}, action) => {
-  switch (action.type) {
-    case 'RECEIVE_CART_ITEMS':
-      const nextState = { ...state };
-      action.cartItems.forEach(cartItem => {
-        nextState[cartItem.id] = cartItem;
-      });
-      return nextState;
-    default:
-      return state;
+  if (action.response) {
+    return {
+      ...state,
+      ...action.response.entities.cartItems,
+    };
   }
+  return state;
 };
 
 export default byCartId;

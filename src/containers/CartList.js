@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CartListView from '../components/CartListView';
 import api from '../api';
 import * as actions from '../actions';
-import { getCartItems, getProducts } from '../reducers';
+import { getCartItems, getCartDetails } from '../reducers';
 import { connect } from 'react-redux';
 
 class CartList extends Component {
@@ -60,35 +60,12 @@ class CartList extends Component {
   }
 }
 
-const getCartDetails = state => {
-  const cartItems = getCartItems(state);
-  const products = getProducts(state, 'cartList');
-  return cartItems.map(cartItem => {
-    const { id, quantity, option } = cartItem;
-    const { mainImgUrl, title } = products.find(
-      product => cartItem.option.productId === product.id
-    );
-    return {
-      ...state,
-      cartId: id,
-      title,
-      price: option.price,
-      mainImgUrl,
-      quantity,
-      optionTitle: option.title,
-      productId: option.productId,
-      checked: true,
-    };
-  });
-};
-
 const mapStateToProps = state => {
-  const isFetching =
-    state.cartItems.cartList.isFetching || state.products.isFetching;
+  const isFetching = state.cartItems.listByCartItems.isFetching;
   return {
     isFetching,
-    cartItems: !isFetching && getCartItems(state),
-    productsInCart: !isFetching && getCartDetails(state),
+    cartItems: getCartItems(state),
+    productsInCart: getCartDetails(state),
   };
 };
 
