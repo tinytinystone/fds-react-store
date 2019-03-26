@@ -8,8 +8,9 @@ export const emptyUserInfo = () => ({
   type: 'EMPTY_USER_INFO',
 });
 
-export const fetchProductsRequest = () => ({
+export const fetchProductsRequest = category => ({
   type: 'FETCH_PRODUCTS_REQUEST',
+  category,
 });
 
 export const requestProducts = () => ({
@@ -57,4 +58,14 @@ export const receiveCartItems = cartItems => ({
 
 export const updateOrder = () => ({
   type: 'UPDATE_ORDER',
+});
+
+export const fetchCartItemsRequest = response => ({
+  type: 'FETCH_CART_ITEMS_REQUEST',
+  response,
+});
+
+export const fetchCartItemsSuccess = response => ({
+  type: 'FETCH_CART_ITEMS_SUCCESS',
+  response,
 });
