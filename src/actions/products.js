@@ -16,12 +16,15 @@ export const fetchProducts = (
     return Promise.resolve();
   }
   try {
-    dispatch(fetchProductsRequest());
+    dispatch(fetchProductsRequest(category));
     let response;
 
     if (productId) {
-      response = await api.get(`/products/${productId}?_embed=options`);
-      console.log(response);
+      response = await api.get('/products/' + productId, {
+        params: {
+          _embed: 'options',
+        },
+      });
     } else {
       const hasCategory = category !== 'all' ? `category=${category}&` : '';
       const hasPage = page ? `_page=${page}` : '';
@@ -50,7 +53,8 @@ export const fetchProducts = (
     );
   } catch (error) {
     dispatch({
-      type: 'FETCH_PRODUCTS_FAILTURE',
+      type: 'FETCH_PRODUCTS_FAILURE',
+      category,
     });
   }
 };
