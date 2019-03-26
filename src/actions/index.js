@@ -1,4 +1,3 @@
-import { fetchItemDetail } from './productDetail';
 import { fetchProducts } from './products';
 import { login, logout, register, refreshUsers } from './users';
 import {
@@ -16,7 +15,6 @@ export {
   refreshUsers,
   createCartItem,
   refreshCartItems,
-  fetchItemDetail,
   fetchProducts,
   updateUserInfo,
   deleteCartItem,
