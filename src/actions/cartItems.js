@@ -49,7 +49,7 @@ export const refreshCartItems = () => async (dispatch, getState) => {
     dispatch(
       fetchProductsSuccess(
         normalize(products, arrayOfProducts),
-        'all',
+        null,
         products.length
       )
     );

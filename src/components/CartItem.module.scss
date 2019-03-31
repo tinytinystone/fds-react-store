@@ -1,0 +1,55 @@
+.cartItem {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.cartItemImg {
+  display: block;
+  width: 100px;
+  height: 150px;
+}
+.button {
+  width: 90px;
+}
+.imgContainer {
+  width: 30%;
+  padding: 10px;
+}
+.container {
+  width: 60%;
+  padding: 10px;
+}
+.title {
+  font-weight: 900;
+  font-size: 1.5em;
+  margin-bottom: 1rem;
+}
+.price,
+.option {
+  display: block;
+  margin-bottom: 1rem;
+}
+.price {
+  color: brown;
+}
+.checkContainer {
+  width: 10%;
+  position: relative;
+}
+.checkbox {
+  position: absolute;
+  top: 30%;
+  width: 30px;
+}
+.quantity {
+  width: 50px;
+}
+.button {
+  width: 100px;
+}
+.bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}

@@ -1,31 +1,45 @@
 import React from 'react';
-import s from './CartListView.module.scss';
+import s from './CartItem.module.scss';
 
 export default function CartItem({ cartItem, deleteItem, findSelectedItems }) {
   const { cartId, title, price, mainImgUrl, quantity, optionTitle } = cartItem;
   return (
     <article className={s.cartItem}>
-      <img src={mainImgUrl} alt={title} />
-      <h3>{title}</h3>
-      <span>{price * quantity}</span>
-      <span>{optionTitle}</span>
-      <input
-        type="checkbox"
-        defaultChecked={true}
-        value={cartId}
-        name="isSelectedItem"
-        onChange={findSelectedItems}
-      />
-      <input
-        type="number"
-        name="quantity"
-        value={quantity}
-        readOnly={true}
-        // onChange={e =>
-        //   this.changeQuantity(parseInt(cartId), parseInt(e.target.value))
-        // }
-      />
-      <button onClick={e => deleteItem(cartId)}>삭제</button>
+      <div className={s.imgContainer}>
+        <img src={mainImgUrl} alt={title} className={s.cartItemImg} />
+      </div>
+      <div className={s.container}>
+        <h3 className={s.title}>{title}</h3>
+        <span className={s.price}>
+          {price * quantity} <span>원</span>
+        </span>
+        <span className={s.option}>{optionTitle}</span>
+      </div>
+      <div className={s.checkContainer}>
+        <input
+          type="checkbox"
+          defaultChecked={true}
+          value={cartId}
+          name="isSelectedItem"
+          onChange={findSelectedItems}
+          className={s.checkbox}
+        />
+      </div>
+      <div className={s.bottom}>
+        <input
+          type="number"
+          name="quantity"
+          value={quantity}
+          readOnly={true}
+          className={s.quantity}
+          // onChange={e =>
+          //   this.changeQuantity(parseInt(cartId), parseInt(e.target.value))
+          // }
+        />
+        <button className={s.button} onClick={e => deleteItem(cartId)}>
+          삭제
+        </button>
+      </div>
     </article>
   );
 }

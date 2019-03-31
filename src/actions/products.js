@@ -6,6 +6,8 @@ import { getIsFetching } from '../reducers/createList';
 export const product = new schema.Entity('products');
 export const arrayOfProducts = [product];
 
+export const option = new schema.Entity('options');
+
 export const fetchProducts = (
   category,
   page = null,

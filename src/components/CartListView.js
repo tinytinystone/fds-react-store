@@ -36,7 +36,7 @@ class CartListView extends Component {
   render() {
     const { productsInCart, deleteItem, findSelectedItems } = this.props;
     return (
-      <section>
+      <section className={s.cart}>
         {productsInCart &&
           productsInCart.map(p => (
             <CartItem
@@ -46,7 +46,9 @@ class CartListView extends Component {
               findSelectedItems={findSelectedItems}
             />
           ))}
-        <button onClick={this.goToOrder}>주문하기</button>
+        <button className={s.button} onClick={this.goToOrder}>
+          주문하기
+        </button>
       </section>
     );
   }
