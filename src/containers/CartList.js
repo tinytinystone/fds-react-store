@@ -31,15 +31,7 @@ class CartList extends Component {
   // }
   handleCheckChange = cartItemId => {
     console.log(cartItemId);
-    // if (e.target.checked) {
-    //   const cartItemId = parseInt(e.target.value);
-    //   const selectedItems = [...this.state.selectedItems, cartItemId];
-    //   this.setState({
-    //     selectedItems,
-    //   });
-    // }
     if (this.state.selectedCartItemIds.includes(cartItemId)) {
-      console.log('있으면 빼고');
       const newArr = this.state.selectedCartItemIds.filter(
         item => item !== cartItemId
       );
@@ -47,24 +39,12 @@ class CartList extends Component {
         selectedCartItemIds: newArr,
       });
     } else {
-      console.log('없으면 넣고');
       this.setState(prevState => ({
         selectedCartItemIds: [...prevState.selectedCartItemIds, cartItemId],
       }));
     }
   };
   goToOrder = () => {
-    // FIXME
-    // const newProductsInCarts = this.state.productsInCarts.filter(
-    //   p => p.checked === true
-    // );
-    // const newArr = [];
-    // for (const p of newProductsInCarts) {
-    //   newArr.push({
-    //     id: p.cartId,
-    //     quantity: p.quantity,
-    //   });
-    // }
     const newArr = this.state.selectedCartItemIds.map(id => {
       const currentCartItem = this.props.cartItems.find(item => item.id === id);
       return {
