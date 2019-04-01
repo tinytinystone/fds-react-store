@@ -1,7 +1,12 @@
 import React from 'react';
 import s from './CartItem.module.scss';
 
-export default function CartItem({ cartItem, deleteItem, findSelectedItems }) {
+export default function CartItem({
+  cartItem,
+  deleteItem,
+  onCheckChange,
+  checked,
+}) {
   const { cartId, title, price, mainImgUrl, quantity, optionTitle } = cartItem;
   return (
     <article className={s.cartItem}>
@@ -18,10 +23,10 @@ export default function CartItem({ cartItem, deleteItem, findSelectedItems }) {
       <div className={s.checkContainer}>
         <input
           type="checkbox"
-          defaultChecked={true}
+          checked={checked}
           value={cartId}
           name="isSelectedItem"
-          onChange={findSelectedItems}
+          onChange={() => onCheckChange(cartId)}
           className={s.checkbox}
         />
       </div>

@@ -20,21 +20,13 @@ class CartListView extends Component {
     });
     this.setState({ productsInCarts: newProductsInCarts });
   };
-  goToOrder = () => {
-    const newProductsInCarts = this.state.productsInCarts.filter(
-      p => p.checked === true
-    );
-    const newArr = [];
-    for (const p of newProductsInCarts) {
-      newArr.push({
-        id: p.cartId,
-        quantity: p.quantity,
-      });
-    }
-    this.props.handleOrderClick(newArr, this.props.cartItems);
-  };
   render() {
-    const { productsInCart, deleteItem, findSelectedItems } = this.props;
+    const {
+      productsInCart,
+      deleteItem,
+      handleCheckChange,
+      selectedCartItemIds,
+    } = this.props;
     return (
       <section className={s.cart}>
         {productsInCart &&
@@ -43,10 +35,11 @@ class CartListView extends Component {
               key={p.cartId}
               cartItem={p}
               deleteItem={deleteItem}
-              findSelectedItems={findSelectedItems}
+              onCheckChange={handleCheckChange}
+              checked={selectedCartItemIds.includes(p.cartId)}
             />
           ))}
-        <button className={s.button} onClick={this.goToOrder}>
+        <button className={s.button} onClick={this.props.goToOrder}>
           주문하기
         </button>
       </section>
