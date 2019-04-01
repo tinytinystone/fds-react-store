@@ -10,22 +10,14 @@ class CartListView extends Component {
       productsInCarts: props.productsInCart,
     };
   }
-  changeQuantity = (cartId, quantity) => {
-    const { productsInCarts } = this.state;
-    const newProductsInCarts = productsInCarts.map(p => {
-      if (p.cartId === cartId) {
-        p.quantity = quantity;
-      }
-      return p;
-    });
-    this.setState({ productsInCarts: newProductsInCarts });
-  };
   render() {
     const {
       productsInCart,
       deleteItem,
       handleCheckChange,
       selectedCartItemIds,
+      handleQtyChange,
+      cartItemQauntityPerId,
     } = this.props;
     return (
       <section className={s.cart}>
@@ -37,6 +29,8 @@ class CartListView extends Component {
               deleteItem={deleteItem}
               onCheckChange={handleCheckChange}
               checked={selectedCartItemIds.includes(p.cartId)}
+              quantity={cartItemQauntityPerId[p.cartId]}
+              onQtyChange={handleQtyChange}
             />
           ))}
         <button className={s.button} onClick={this.props.goToOrder}>

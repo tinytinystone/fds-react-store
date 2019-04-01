@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import CartListView from '../components/CartListView';
-import api from '../api';
 import * as actions from '../actions';
 import { getCartItems, getCartDetails } from '../reducers';
 import { connect } from 'react-redux';
@@ -10,6 +9,7 @@ class CartList extends Component {
     super(props);
     this.state = {
       selectedCartItemIds: [],
+      cartItemQauntityPerId: {},
     };
   }
   componentDidMount() {
@@ -20,6 +20,13 @@ class CartList extends Component {
     if (prevProps.cartItems !== this.props.cartItems) {
       this.setState({
         selectedCartItemIds: this.props.cartItems.map(ci => ci.id),
+        cartItemQauntityPerId: this.props.cartItems.reduce(
+          (acc, ci) => ({
+            ...acc,
+            [ci.id]: ci.quantity,
+          }),
+          {}
+        ),
       });
     }
   }
@@ -30,7 +37,6 @@ class CartList extends Component {
   //   };
   // }
   handleCheckChange = cartItemId => {
-    console.log(cartItemId);
     if (this.state.selectedCartItemIds.includes(cartItemId)) {
       const newArr = this.state.selectedCartItemIds.filter(
         item => item !== cartItemId
@@ -44,21 +50,22 @@ class CartList extends Component {
       }));
     }
   };
+  handleQtyChange = (cartItemId, qty) => {
+    this.setState(prevState => ({
+      cartItemQauntityPerId: {
+        ...prevState.cartItemQauntityPerId,
+        [cartItemId]: qty,
+      },
+    }));
+  };
   goToOrder = () => {
     const newArr = this.state.selectedCartItemIds.map(id => {
-      const currentCartItem = this.props.cartItems.find(item => item.id === id);
       return {
         id,
-        quantity: currentCartItem.quantity,
+        quantity: this.state.cartItemQauntityPerId[id],
       };
     });
     this.props.orderCartItems(newArr, this.props.cartItems);
-  };
-  handleQtyChange = e => {
-    const quantity = parseInt(e.target.value);
-    this.setState({
-      quantity,
-    });
   };
   handleCreateCartItem = async (optionId, quantity) => {
     const { createCartItem } = this.props;
@@ -84,8 +91,11 @@ class CartList extends Component {
         handleOrderClick={orderCartItems}
         deleteItem={deleteCartItem}
         handleCheckChange={this.handleCheckChange}
+        handleQtyChange={this.handleQtyChange}
         goToOrder={this.goToOrder}
         selectedCartItemIds={this.state.selectedCartItemIds}
+        cartItemQauntityPerId={this.state.cartItemQauntityPerId}
+        changeQuantity={this.changeQuantity}
         {...rest}
       />
     );

@@ -6,8 +6,10 @@ export default function CartItem({
   deleteItem,
   onCheckChange,
   checked,
+  quantity,
+  onQtyChange,
 }) {
-  const { cartId, title, price, mainImgUrl, quantity, optionTitle } = cartItem;
+  const { cartId, title, price, mainImgUrl, optionTitle } = cartItem;
   return (
     <article className={s.cartItem}>
       <div className={s.imgContainer}>
@@ -35,11 +37,8 @@ export default function CartItem({
           type="number"
           name="quantity"
           value={quantity}
-          readOnly={true}
           className={s.quantity}
-          // onChange={e =>
-          //   this.changeQuantity(parseInt(cartId), parseInt(e.target.value))
-          // }
+          onChange={e => onQtyChange(cartId, parseInt(e.target.value))}
         />
         <button className={s.button} onClick={e => deleteItem(cartId)}>
           삭제
