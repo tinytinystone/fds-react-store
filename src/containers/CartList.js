@@ -8,7 +8,7 @@ class CartList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedCartItemIds: [],
+      cartItemCheckedPerId: {},
       cartItemQauntityPerId: {},
     };
   }
@@ -19,7 +19,13 @@ class CartList extends Component {
     // 컴포넌트가 업데이트 될때 실행되는 라이프사이클 훅
     if (prevProps.cartItems !== this.props.cartItems) {
       this.setState({
-        selectedCartItemIds: this.props.cartItems.map(ci => ci.id),
+        cartItemCheckedPerId: this.props.cartItems.reduce(
+          (acc, ci) => ({
+            ...acc,
+            [ci.id]: true,
+          }),
+          {}
+        ),
         cartItemQauntityPerId: this.props.cartItems.reduce(
           (acc, ci) => ({
             ...acc,
@@ -30,25 +36,13 @@ class CartList extends Component {
       });
     }
   }
-  // static getDerivedStateFromProps(props, state) {
-  //   console.log('getDerivedStateFromProps');
-  //   return {
-  //     selectedCartItemIds: props.cartItems.map(ci => ci.id),
-  //   };
-  // }
   handleCheckChange = cartItemId => {
-    if (this.state.selectedCartItemIds.includes(cartItemId)) {
-      const newArr = this.state.selectedCartItemIds.filter(
-        item => item !== cartItemId
-      );
-      this.setState({
-        selectedCartItemIds: newArr,
-      });
-    } else {
-      this.setState(prevState => ({
-        selectedCartItemIds: [...prevState.selectedCartItemIds, cartItemId],
-      }));
-    }
+    this.setState(prevState => ({
+      cartItemCheckedPerId: {
+        ...prevState.cartItemCheckedPerId,
+        [cartItemId]: !prevState.cartItemCheckedPerId[cartItemId],
+      },
+    }));
   };
   handleQtyChange = (cartItemId, qty) => {
     this.setState(prevState => ({
@@ -58,14 +52,19 @@ class CartList extends Component {
       },
     }));
   };
-  goToOrder = () => {
-    const newArr = this.state.selectedCartItemIds.map(id => {
+  goToOrder = async () => {
+    const { cartItemCheckedPerId, cartItemQauntityPerId } = this.state;
+    const arr = Object.keys(cartItemCheckedPerId).filter(
+      id => cartItemCheckedPerId[id]
+    );
+    const newArr = arr.map(id => {
       return {
         id,
-        quantity: this.state.cartItemQauntityPerId[id],
+        quantity: cartItemQauntityPerId[id],
       };
     });
-    this.props.orderCartItems(newArr, this.props.cartItems);
+    await this.props.orderCartItems(newArr, this.props.cartItems);
+    await this.props.refreshCartItems();
   };
   handleCreateCartItem = async (optionId, quantity) => {
     const { createCartItem } = this.props;
@@ -93,7 +92,7 @@ class CartList extends Component {
         handleCheckChange={this.handleCheckChange}
         handleQtyChange={this.handleQtyChange}
         goToOrder={this.goToOrder}
-        selectedCartItemIds={this.state.selectedCartItemIds}
+        cartItemCheckedPerId={this.state.cartItemCheckedPerId}
         cartItemQauntityPerId={this.state.cartItemQauntityPerId}
         changeQuantity={this.changeQuantity}
         {...rest}

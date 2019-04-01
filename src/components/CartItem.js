@@ -5,11 +5,11 @@ export default function CartItem({
   cartItem,
   deleteItem,
   onCheckChange,
-  checked,
+  checked = true,
   quantity,
   onQtyChange,
 }) {
-  const { cartId, title, price, mainImgUrl, optionTitle } = cartItem;
+  const { cartId = '', title, price, mainImgUrl, optionTitle } = cartItem;
   return (
     <article className={s.cartItem}>
       <div className={s.imgContainer}>

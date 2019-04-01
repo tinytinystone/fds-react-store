@@ -15,7 +15,7 @@ class CartListView extends Component {
       productsInCart,
       deleteItem,
       handleCheckChange,
-      selectedCartItemIds,
+      cartItemCheckedPerId,
       handleQtyChange,
       cartItemQauntityPerId,
     } = this.props;
@@ -28,7 +28,7 @@ class CartListView extends Component {
               cartItem={p}
               deleteItem={deleteItem}
               onCheckChange={handleCheckChange}
-              checked={selectedCartItemIds.includes(p.cartId)}
+              checked={cartItemCheckedPerId[p.cartId]}
               quantity={cartItemQauntityPerId[p.cartId]}
               onQtyChange={handleQtyChange}
             />
