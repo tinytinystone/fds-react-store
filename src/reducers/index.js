@@ -19,8 +19,10 @@ export const getProducts = (state, category) =>
 export const getTotalCount = (state, category) =>
   fromProducts.getTotalCount(state, category);
 
-export const getIsFetching = (state, category) =>
+export const getIsFetchingProducts = (state, category) =>
   fromProducts.getIsFetching(state, category);
+
+export const getIsFetchingCart = state => fromCartItems.getIsFetching(state);
 
 export const getCartItems = state => fromCartItems.getCartItems(state);
 

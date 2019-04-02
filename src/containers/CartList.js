@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CartListView from '../components/CartListView';
 import * as actions from '../actions';
-import { getCartItems, getCartDetails } from '../reducers';
+import { getCartItems, getCartDetails, getIsFetchingCart } from '../reducers';
 import { connect } from 'react-redux';
 
 class CartList extends Component {
@@ -77,10 +77,14 @@ class CartList extends Component {
       isFetching,
       deleteCartItem,
       orderCartItems,
+      errorMessage,
       ...rest
     } = this.props;
     if (isFetching && !cartItems.length) {
       return <p>Loading...</p>;
+    }
+    if (errorMessage) {
+      return <p>로그인 후 확인해 주세요!</p>;
     }
     return (
       <CartListView
@@ -102,11 +106,11 @@ class CartList extends Component {
 }
 
 const mapStateToProps = state => {
-  const isFetching = state.cartItems.listByCartItems.isFetching;
   return {
-    isFetching,
+    isFetching: getIsFetchingCart(state),
     cartItems: getCartItems(state),
     productsInCart: getCartDetails(state),
+    errorMessage: state.cartItems.listByCartItems.errorMessage,
   };
 };
 
