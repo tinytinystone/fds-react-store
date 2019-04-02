@@ -17,13 +17,19 @@ export const product = new schema.Entity('products');
 export const arrayOfProducts = [product];
 
 export const createCartItem = (optionId, quantity) => async dispatch => {
-  await api.post('cartItems', {
-    optionId,
-    quantity,
-    ordered: false,
-  });
-  alert('장바구니에 담겼습니다.');
-  // return dispatch(updateCartItem());
+  try {
+    await api.post('cartItems', {
+      optionId,
+      quantity,
+      ordered: false,
+    });
+    alert('장바구니에 담겼습니다.');
+  } catch (error) {
+    return dispatch({
+      type: 'CREATE_CART_ITEMS_FAILURE',
+      message: `${error} is occurred.`,
+    });
+  }
 };
 
 export const refreshCartItems = () => async (dispatch, getState) => {
@@ -54,18 +60,26 @@ export const refreshCartItems = () => async (dispatch, getState) => {
       )
     );
     dispatch(fetchCartItemsSuccess(normalize(cartItems, arrayOfCartItems)));
-  } catch (e) {
+  } catch (error) {
+    console.log(error);
     return dispatch({
       type: 'FETCH_CART_ITEMS_FAILURE',
-      message: `${e} is occurred.`,
+      message: `${error} is occurred.`,
     });
   }
 };
 
 export const deleteCartItem = cartItemId => async dispatch => {
-  await api.delete('cartItems/' + cartItemId);
-  alert('해당 항목이 삭제 되었습니다.');
-  await dispatch(refreshCartItems());
+  try {
+    await api.delete('cartItems/' + cartItemId);
+    alert('해당 항목이 삭제 되었습니다.');
+    await dispatch(refreshCartItems());
+  } catch (error) {
+    return dispatch({
+      type: 'DELETE_CART_ITEMS_FAILURE',
+      message: `${error} is occurred.`,
+    });
+  }
 };
 
 const requestCartItemOrdered = (

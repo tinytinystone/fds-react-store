@@ -6,7 +6,8 @@ import { getIsFetching } from '../reducers/createList';
 export const product = new schema.Entity('products');
 export const arrayOfProducts = [product];
 
-export const option = new schema.Entity('options');
+// FIXME: option 을 별도의 state로 만들기
+// export const option = new schema.Entity('options');
 
 export const fetchProducts = (
   category,
@@ -57,14 +58,22 @@ export const fetchProducts = (
     dispatch({
       type: 'FETCH_PRODUCTS_FAILURE',
       category,
+      message: `Fetching products fails. Error is occurred: ${error}`,
     });
   }
 };
 
 export const fetchProductsForCart = params => async dispatch => {
-  dispatch(fetchProductsRequest());
-  const { data: products } = await api.get('products', {
-    params,
-  });
-  dispatch(fetchProductsSuccess(products, 'cartList', products.length));
+  try {
+    dispatch(fetchProductsRequest());
+    const { data: products } = await api.get('products', {
+      params,
+    });
+    dispatch(fetchProductsSuccess(products, 'cartList', products.length));
+  } catch (error) {
+    dispatch({
+      type: 'FETCH_PRODUCTS_FOR_CARTS_FAILURE',
+      message: `Fetching products for cart fails. Error is occurred: ${error}`,
+    });
+  }
 };

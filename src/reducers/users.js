@@ -13,6 +13,13 @@ export const users = (state = {}, action) => {
         username: null,
         logoutSuccess: true,
       };
+    case 'LOGIN_FAILURE':
+    case 'LOGOUT FAILURE':
+    case 'REGISTER_FAILURE':
+      return {
+        ...state,
+        errorMessage: action.message,
+      };
     default:
       return state;
   }

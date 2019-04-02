@@ -13,9 +13,13 @@ export default class LoginForm extends Component {
   render() {
     return (
       <React.Fragment>
+        <h2>로그인</h2>
         <form onSubmit={this.handleSubmit} className={s.loginForm}>
           <input type="text" name="username" placeholder="username" />
           <input type="password" name="password" placeholder="password" />
+          {this.props.errorMessage && (
+            <div>오류가 있습니다. 다시 확인해 주세요.</div>
+          )}
           <button>로그인</button>
         </form>
         <div>

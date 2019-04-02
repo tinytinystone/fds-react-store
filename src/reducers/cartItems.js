@@ -25,6 +25,8 @@ const isFetching = (state = false, action) => {
 const errorMessage = (state = null, action) => {
   switch (action.type) {
     case 'FETCH_CART_ITEMS_FAILURE':
+    case 'CREATE_CART_ITEMS_FAILURE':
+    case 'DELETE_CART_ITEMS_FAILURE':
       return action.message;
     case 'FETCH_CART_ITEMS_REQUEST':
     case 'FETCH_CART_ITEMS_SUCCESS':
