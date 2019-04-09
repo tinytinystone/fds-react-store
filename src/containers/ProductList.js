@@ -13,7 +13,6 @@ class ProductList extends Component {
     const { page, category, productsPerPage, fetchProducts } = this.props;
     fetchProducts(category, page, productsPerPage);
   }
-
   countPageNumber() {
     const { totalCount, productsPerPage } = this.props;
     const pageNumbers = [];
@@ -30,7 +29,6 @@ class ProductList extends Component {
       price: p.options && p.options[0].price,
     }));
   }
-
   render() {
     const { products, page, category, isFetching, ...rest } = this.props;
 
